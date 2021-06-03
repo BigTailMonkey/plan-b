@@ -10,16 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.btm.planb</groupId>
-    <artifactId>work-log-statistic</artifactId>
+    <artifactId>export-excel</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-excel</artifactId>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
         </dependency>
     </dependencies>
 

@@ -10,11 +10,38 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>work-log-statistic</module>
+        <module>export-excel</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <plan-b.version>0.0.1-SNAPSHOT</plan-b.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>work-log-statistic</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>export-excel</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>5.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
