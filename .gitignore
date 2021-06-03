@@ -1,0 +1,18 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.settings
+/.classpath
+/.project
+/target
+/**/target/
+/.idea/*
+/bin/
+*/*.iml
+*.iml
+/*/*.iml
+.project
+**/**/*.iml
+.idea
+.idea/workspace.xml
+/**/.classpath
+/**/.project
+/**/.settings
