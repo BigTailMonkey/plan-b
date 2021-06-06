@@ -3,12 +3,22 @@ package com.btm.planb.worklogstatistic;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class WorkLogTest {
 
     @Test
     public void analysis() {
+        WorkLog workLog = new WorkLog();
+        try {
+            List<WorkLogStandLine> analysis = workLog.analysis("/Users/houdawei/Desktop/workLog.txt");
+            System.out.println(analysis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

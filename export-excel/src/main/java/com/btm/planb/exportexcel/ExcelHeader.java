@@ -2,7 +2,7 @@ package com.btm.planb.exportexcel;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.FIELD)
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ExcelHeader {
