@@ -11,6 +11,7 @@
     <modules>
         <module>work-log-statistic</module>
         <module>export-excel</module>
+        <module>time-util</module>
     </modules>
 
     <properties>
@@ -29,6 +30,11 @@
             <dependency>
                 <groupId>com.btm.planb</groupId>
                 <artifactId>export-excel</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>time-util</artifactId>
                 <version>${plan-b.version}</version>
             </dependency>
             <dependency>

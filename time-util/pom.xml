@@ -10,21 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.btm.planb</groupId>
-    <artifactId>work-log-statistic</artifactId>
+    <artifactId>time-util</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-excel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>time-util</artifactId>
         </dependency>
     </dependencies>
 
