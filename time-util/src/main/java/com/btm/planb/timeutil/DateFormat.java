@@ -1,6 +1,7 @@
 package com.btm.planb.timeutil;
 
-import java.util.regex.Pattern;
+import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * 日期格式化，仅支持包含'年月日'的日期信息格式化，不能格式化'时分秒'时间信息
@@ -28,23 +29,12 @@ public class DateFormat {
      * @return 格式化后的日期
      */
     public static String formatDateTime(String dateTime) {
-        if (Pattern.matches("[1-9]{1,2}月[01]{0,1}[0-9]{1,2}[日号]", dateTime)) {
+        DateExtractor extractor = new DateExtractor();
+        LocalDate localDate = extractor.extractFirst(dateTime);
+        if (Objects.isNull(localDate)) {
             return dateTime;
+        } else {
+            return localDate.getMonthValue() + "月" + localDate.getDayOfMonth() + "日";
         }
-        if (Pattern.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$", dateTime)) {
-            String[] date = dateTime.split("-");
-            return Integer.parseInt(date[1]) + "月" + Integer.parseInt(date[2]) + "日";
-        }
-        if (Pattern.matches("^\\d{1,2}-\\d{1,2}$", dateTime)) {
-            String[] date = dateTime.split("-");
-            return Integer.parseInt(date[0]) + "月" + Integer.parseInt(date[1]) + "日";
-        }
-        if (Pattern.matches("^[1-9]{1,2}\\.[01]{0,1}[0-9]{1,2}[日号]$", dateTime)) {
-            return dateTime.replace(".", "月");
-        }
-        if (Pattern.matches("^[1-9]{1,2}\\.[01]{0,1}[0-9]{1,2}$", dateTime)) {
-            return dateTime.replace(".", "月") + "日";
-        }
-        return dateTime;
     }
 }

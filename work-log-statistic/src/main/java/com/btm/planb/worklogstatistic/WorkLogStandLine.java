@@ -1,7 +1,9 @@
 package com.btm.planb.worklogstatistic;
 
 import com.btm.planb.exportexcel.ExcelHeader;
+import com.btm.planb.worklogstatistic.keyNode.INode;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,35 +26,68 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
     private String sourceStr;
 
     // 时间
-    private String datetime;
+    private LocalDate datetime;
 
     // 内容
     private String workInfo;
+
+    // 所属项目集
+    private String programName;
 
     // 需求编号
     private String demandNumber;
 
     // 关键节点信息
-    private String flag;
+    private INode keyNode;
 
     // 关键节点信息的原始数据
     // 关键节点信息要位于日志的结尾，使用括号标示并要含有时间信息
     private String flagSourceInfo;
 
+    // 重点项目
+    private boolean majorProgram;
+
     // 错误信息
     private String errorInfo;
 
-    public String getDatetime() {
+    public LocalDate getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(String datetime) {
+    public String getDatetimeStr() {
+        return Objects.isNull(datetime) ? "" :
+                datetime.getMonthValue() +"月" + datetime.getDayOfMonth() + "日";
+    }
+
+    public void setDatetime(LocalDate datetime) {
         this.datetime = datetime;
+    }
+
+    public boolean isMajorProgram() {
+        return majorProgram;
+    }
+
+    @ExcelHeader("重点项目")
+    public String isMajorProgramStr() {
+        return majorProgram ? "是" : "";
+    }
+
+    public void setMajorProgram(boolean majorProgram) {
+        this.majorProgram = majorProgram;
     }
 
     @ExcelHeader("工作内容")
     public String getWorkInfo() {
-        return workInfo;
+        return (Objects.isNull(demandNumber) ? "" : demandNumber + " ") + workInfo;
+    }
+
+    @ExcelHeader("项目集")
+    public String getProgramName() {
+        return Objects.isNull(programName) ? "" : programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 
     public void setWorkInfo(String workInfo) {
@@ -61,6 +96,7 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
         Matcher matcher = pattern.matcher(workInfo);
         if (matcher.find()) {
             this.demandNumber = matcher.group();
+            this.workInfo = workInfo.replace(demandNumber,"");
         }
     }
 
@@ -71,11 +107,11 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
 
     @ExcelHeader("状态")
     public String getFlag() {
-        return Objects.isNull(flag) ? "" : flag;
+        return Objects.isNull(keyNode) ? "" : keyNode.getNodeDesc();
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setKeyNode(INode keyNode) {
+        this.keyNode = keyNode;
     }
 
     public String getSourceStr() {
@@ -105,8 +141,12 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
 
     @ExcelHeader("备注")
     public String remark() {
-        if (Objects.nonNull(datetime) && Objects.nonNull(flag)) {
-            return this.datetime + " " + this.flag;
+        if (Objects.nonNull(datetime) && Objects.nonNull(keyNode)) {
+            if (datetime.isAfter(LocalDate.now())) {
+                return getDatetimeStr() + " " + this.keyNode.getNextNodeDesc();
+            } else {
+                return getDatetimeStr() + " " + this.keyNode.getNodeDesc();
+            }
         }
         return getFlagSourceInfo();
     }
@@ -140,7 +180,7 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
                 "sourceStr='" + sourceStr + '\'' +
                 ", Datetime='" + datetime + '\'' +
                 ", workInfo='" + workInfo + '\'' +
-                ", flag='" + flag + '\'' +
+                ", keyNode='" + keyNode + '\'' +
                 ", flagSourceInfo='" + flagSourceInfo + '\'' +
                 ", errorInfo='" + errorInfo + '\'' +
                 '}';
@@ -151,11 +191,11 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkLogStandLine standLine = (WorkLogStandLine) o;
-        return Objects.equals(sourceStr, standLine.sourceStr) && Objects.equals(datetime, standLine.datetime) && Objects.equals(workInfo, standLine.workInfo) && Objects.equals(flag, standLine.flag) && Objects.equals(flagSourceInfo, standLine.flagSourceInfo) && Objects.equals(errorInfo, standLine.errorInfo);
+        return Objects.equals(sourceStr, standLine.sourceStr) && Objects.equals(datetime, standLine.datetime) && Objects.equals(workInfo, standLine.workInfo) && Objects.equals(keyNode, standLine.keyNode) && Objects.equals(flagSourceInfo, standLine.flagSourceInfo) && Objects.equals(errorInfo, standLine.errorInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sourceStr, datetime, workInfo, flag, flagSourceInfo, errorInfo);
+        return Objects.hash(sourceStr, datetime, workInfo, keyNode, flagSourceInfo, errorInfo);
     }
 }

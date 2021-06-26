@@ -52,6 +52,8 @@ public class DateExtractorTest {
         expect = LocalDate.of(0,9,2);
         actual = extractor.translate("9月2日");
         Assert.assertEquals(expect, actual);
+        actual = extractor.translate("9月2");
+        Assert.assertEquals(expect, actual);
         actual = extractor.translate("09-02");
         Assert.assertEquals(expect, actual);
         actual = extractor.translate("9-2");

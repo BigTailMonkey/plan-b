@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 日期提取器，只能提取"年月日"日期信息，不支持提取"时分秒"时间信息
@@ -21,7 +19,7 @@ public class DateExtractor {
      * @return 解析完成的'年月日'的日期
      */
     public LocalDate extractFirst(String strWithDate) {
-        String dateString = firstDateString(strWithDate, false);
+        String dateString = DateDetector.firstDateString(strWithDate, false);
         if (Objects.nonNull(dateString)) {
             return doExtract(dateString, true);
         } else {
@@ -35,7 +33,7 @@ public class DateExtractor {
      * @return 解析完成的'年月日'的日期
      */
     public LocalDate extractLast(String strWithDate) {
-        String dateString = lastDateString(strWithDate, false);
+        String dateString = DateDetector.lastDateString(strWithDate, false);
         if (Objects.nonNull(dateString)) {
             return doExtract(dateString, true);
         } else {
@@ -62,7 +60,7 @@ public class DateExtractor {
      * @return 解析完成的'年月日'的日期
      */
     public List<LocalDate> extract(String strWithDate, boolean ignoreDecimal, boolean interruptWithThrow) {
-        List<String> dateStrings = hasDateString(strWithDate, ignoreDecimal);
+        List<String> dateStrings = DateDetector.hasDateString(strWithDate, ignoreDecimal);
         List<LocalDate> dateList = new ArrayList<>();
         for (String dateString : dateStrings) {
             LocalDate date = doExtract(dateString, interruptWithThrow);
@@ -93,96 +91,92 @@ public class DateExtractor {
     }
 
     /**
-     * 从字符串中识别并提取日期字符串，如果有则返回匹配到的日期
+     * 对各种格式的时间进行格式化，将一下格式的时间解析为{@link LocalDate}对象<br/>
+     * <ol>
+     *     <li>yyyy-mm-dd</li>
+     *     <li>mm-dd</li>
+     *     <li>yyyy/mm/dd</li>
+     *     <li>mm/dd</li>
+     *     <li>yyyy.mm.dd</li>
+     *     <li>mm.dd</li>
+     *     <li>yyyy年mm月dd日</li>
+     *     <li>mm月dd日</li>
+     *     <li>yyyy年mm月dd号</li>
+     *     <li>mm月dd号</li>
+     *     <li>mm月dd</li>
+     * </ol>
+     * 若传入的日期字符串不符合以上格式则抛出异常
      *
-     * @param strWithDate 包含"年月日"日期的字符串
-     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"会被识别为日期"6月2日"；false：不忽略小数点号分割的日期
-     * @return 从字符串中识别到的所有字符串，若没有匹配到则返回长度为零的集合
+     * @param dateStrings 符合格式的日期字符串
+     * @return 解析后的日期
+     * @throws DateFormatException 时间格式异常
      */
-    public List<String> hasDateString(String strWithDate, boolean ignoreDecimal) {
-        List<String> result = new ArrayList<>();
-        String dateFormatRegex = "[1-9]\\d{0,3}[-年/.]?(0?[1-9]|1\\d)[-月/.]?(0?[1-9]|[12]\\d)[日号]?";
-        if (ignoreDecimal) {
-            dateFormatRegex = "[1-9]\\d{0,3}[-年/]?(0?[1-9]|1\\d)[-月/]?(0?[1-9]|[12]\\d)[日号]?";
-        }
-        Pattern compile = Pattern.compile(dateFormatRegex);
-        Matcher matcher = compile.matcher(strWithDate);
-        while (matcher.find()) {
-            result.add(matcher.group());
+    public LocalDate translate(String dateStrings) throws DateFormatException{
+        LocalDate result;
+        switch (EnumDateFormat.format(dateStrings)) {
+            case YMD1:
+            // yyyy-mm-dd
+            String[] ymd1 = dateStrings.split("-");
+            result = LocalDate.of(Integer.parseInt(ymd1[0]),Integer.parseInt(ymd1[1]),Integer.parseInt(ymd1[2]));
+            break;
+            case MD1:
+            // mm-dd
+            String[] md1 = dateStrings.split("-");
+            result = LocalDate.of(0,Integer.parseInt(md1[0]),Integer.parseInt(md1[1]));
+            break;
+            case YMD2:
+            // yyyy/mm/dd
+            String[] ymd2 = dateStrings.split("/");
+            result = LocalDate.of(Integer.parseInt(ymd2[0]),Integer.parseInt(ymd2[1]),Integer.parseInt(ymd2[2]));
+            break;
+            case MD2:
+            // mm/dd
+            String[] md2 = dateStrings.split("/");
+            result = LocalDate.of(0,Integer.parseInt(md2[0]),Integer.parseInt(md2[1]));
+            break;
+            case YMD3:
+            // yyyy.mm.dd
+            String[] ymd3 = dateStrings.split("\\.");
+            result = LocalDate.of(Integer.parseInt(ymd3[0]),Integer.parseInt(ymd3[1]),Integer.parseInt(ymd3[2]));
+            break;
+            case MD3:
+            // mm.dd
+            String[] md3 = dateStrings.split("\\.");
+            result = LocalDate.of(0,Integer.parseInt(md3[0]),Integer.parseInt(md3[1]));
+            break;
+            case YMD4:
+            case YMD5:
+            // yyyy年mm月dd日；yyyy年mm月dd号
+            int ymd_y = dateStrings.indexOf("年");
+            int ymd_m = dateStrings.indexOf("月");
+            int ymd_d = dateStrings.indexOf("日");
+            if (ymd_d < 0) {
+                ymd_d = dateStrings.indexOf("号");
+            }
+            int yyyy = Integer.parseInt(dateStrings.substring(0, ymd_y));
+            int ymd_mm = Integer.parseInt(dateStrings.substring(ymd_y+1, ymd_m));
+            int ymd_dd = Integer.parseInt(dateStrings.substring(ymd_m+1, ymd_d));
+            result = LocalDate.of(yyyy, ymd_mm, ymd_dd);
+            break;
+            case MD4:
+            case MD5:
+            case MD6:
+            // mm月dd日；mm月dd号；mm月dd
+            int md_m = dateStrings.indexOf("月");
+            int md_d = dateStrings.indexOf("日");
+            if (md_d < 0) {
+                md_d = dateStrings.indexOf("号");
+            }
+            if (md_d < 0) {
+                md_d = dateStrings.length();
+            }
+            int md_mm = Integer.parseInt(dateStrings.substring(0, md_m));
+            int md_dd = Integer.parseInt(dateStrings.substring(md_m+1,md_d));
+            result = LocalDate.of(0, md_mm, md_dd);
+            break;
+            default:
+            throw new DateFormatException("日期解析失败,解析不支持的时间："+dateStrings);
         }
         return result;
-    }
-
-    public String firstDateString(String strWithDate, boolean ignoreDecimal) {
-        List<String> result = hasDateString(strWithDate, ignoreDecimal);
-        if (0 < result.size()) {
-            return result.get(0);
-        }
-        return null;
-    }
-
-    public String lastDateString(String strWithDate, boolean ignoreDecimal) {
-        List<String> result = hasDateString(strWithDate, ignoreDecimal);
-        if (0 < result.size()) {
-            return result.get(result.size() - 1);
-        }
-        return null;
-    }
-
-    /**
-     * 对各种格式的事件进行
-     * @param dateStrings 符合'年月日'格式的日期字符串
-     * @return 解析后的日期
-     */
-    public LocalDate translate(String dateStrings) {
-        if (Pattern.matches("^[1-9]\\d{0,3}-(0?[1-9]|1\\d)-(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // yyyy-mm-dd
-            String[] dateStrArr = dateStrings.split("-");
-            return LocalDate.of(Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]),Integer.parseInt(dateStrArr[2]));
-        } else if (Pattern.matches("^(0?[1-9]|1\\d)-(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // mm-dd
-            String[] dateStrArr = dateStrings.split("-");
-            return LocalDate.of(0,Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]));
-        } else if (Pattern.matches("^[1-9]\\d{0,3}/(0?[1-9]|1\\d)/(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // yyyy/mm/dd
-            String[] dateStrArr = dateStrings.split("/");
-            return LocalDate.of(Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]),Integer.parseInt(dateStrArr[2]));
-        } else if (Pattern.matches("^(0?[1-9]|1\\d)/(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // mm/dd
-            String[] dateStrArr = dateStrings.split("/");
-            return LocalDate.of(0,Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]));
-        } else if (Pattern.matches("^[1-9]\\d{0,3}.(0?[1-9]|1\\d).(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // yyyy.mm.dd
-            String[] dateStrArr = dateStrings.split("\\.");
-            return LocalDate.of(Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]),Integer.parseInt(dateStrArr[2]));
-        } else if (Pattern.matches("^(0?[1-9]|1\\d).(0?[1-9]|[12]\\d)$", dateStrings)) {
-            // mm.dd
-            String[] dateStrArr = dateStrings.split("\\.");
-            return LocalDate.of(0,Integer.parseInt(dateStrArr[0]),Integer.parseInt(dateStrArr[1]));
-        } else if (Pattern.matches("^[1-9]\\d{0,3}年(0?[1-9]|1\\d)月(0?[1-9]|[12]\\d)[日号]$", dateStrings)) {
-            // yyyy年mm月dd日；yyyy年mm月dd号
-            int y = dateStrings.indexOf("年");
-            int m = dateStrings.indexOf("月");
-            int d = dateStrings.indexOf("日");
-            if (d < 0) {
-                d = dateStrings.indexOf("号");
-            }
-            int yyyy = Integer.parseInt(dateStrings.substring(0, y));
-            int mm = Integer.parseInt(dateStrings.substring(y+1, m));
-            int dd = Integer.parseInt(dateStrings.substring(m+1,d));
-            return LocalDate.of(yyyy, mm, dd);
-        } else if (Pattern.matches("^(0?[1-9]|1\\d)月(0?[1-9]|[12]\\d)[日号]$", dateStrings)) {
-            // mm月dd日；mm月dd号
-            int m = dateStrings.indexOf("月");
-            int d = dateStrings.indexOf("日");
-            if (d < 0) {
-                d = dateStrings.indexOf("号");
-            }
-            int mm = Integer.parseInt(dateStrings.substring(0, m));
-            int dd = Integer.parseInt(dateStrings.substring(m+1,d));
-            return LocalDate.of(0, mm, dd);
-        } else {
-            throw new RuntimeException("日期解析失败,解析不支持的时间："+dateStrings);
-        }
     }
 }

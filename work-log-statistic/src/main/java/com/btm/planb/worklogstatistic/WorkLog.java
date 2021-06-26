@@ -1,10 +1,14 @@
 package com.btm.planb.worklogstatistic;
 
+import com.sun.deploy.util.StringUtils;
+
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WorkLog {
+
+    public static final ThreadLocal<LogLineProperties> workLogProperties = new ThreadLocal<>();
 
     /**
      * 解析
@@ -12,7 +16,7 @@ public class WorkLog {
      * @return 工作日志标准行数据
      * @throws IOException
      */
-    public List<WorkLogStandLine> analysis(String filePath) throws IOException {
+    public List<WorkLogStandLine> analysis(String filePath) throws IOException, IllegalAccessException {
         return analysis(new File(filePath));
     }
 
@@ -22,21 +26,64 @@ public class WorkLog {
      * @return 工作日志标准行数据
      * @throws IOException
      */
-    public List<WorkLogStandLine> analysis(File file) throws IOException {
+    public List<WorkLogStandLine> analysis(File file) throws IOException, IllegalAccessException {
         List<WorkLogStandLine> standLines = new ArrayList<>();
         Analysister analysister = new Analysister();
         try (FileReader fileReader = new FileReader(file);
              BufferedReader in = new BufferedReader(fileReader)) {
+            LogLineProperties logLineProperties = loadWorkLogProperties();
             String line;
+            String programGroup = "";
             while ((line = in.readLine()) != null) {
-                if (distinguishRealWorkLog(line)) {
-                    standLines.add(analysister.statistic(line,"^[Bb][tT][Bb]-\\d{1,5}"));
+                if (logLineProperties.isProgramGroup(line)) {
+                    programGroup = line;
+                } else if (distinguishRealWorkLog(line)) {
+                    standLines.add(analysister.statistic(programGroup, line,"^[Bb][tT][Bb]-\\d{1,5}"));
                 }
             }
+        } finally {
+            workLogProperties.remove();
         }
         signDiffOrDeleteRepeat(standLines);
         Collections.sort(standLines);
         return standLines;
+    }
+
+    /**
+     * 加载配置文件
+     * @throws IOException 文件读取异常
+     */
+    public LogLineProperties loadWorkLogProperties() throws IOException, IllegalAccessException {
+        Properties properties = new Properties();
+        InputStream in = WorkLog.class.getClassLoader().getResourceAsStream("WorkLog.properties");
+        if (Objects.nonNull(in)) {
+            properties.load(new InputStreamReader(in));
+            workLogProperties.set(readProperties(properties));
+            return workLogProperties.get();
+        }
+        return new LogLineProperties();
+    }
+
+    /**
+     * 读取配置文件，构建日志行配置信息
+     * @param properties 配置信息
+     * @return 日志行配置信息
+     */
+    public LogLineProperties readProperties(Properties properties) throws IllegalAccessException {
+        LogLineProperties logLineProperties = new LogLineProperties();
+        Field[] declaredFields = LogLineProperties.class.getDeclaredFields();
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            PropertiesName annotation = field.getAnnotation(PropertiesName.class);
+            if (Objects.nonNull(annotation)) {
+                String property = properties.getProperty(annotation.value());
+                if (Objects.nonNull(property) && property.length() > 0) {
+                    String[] strings = StringUtils.splitString(property, ",");
+                    field.set(logLineProperties,strings);
+                }
+            }
+        }
+        return logLineProperties;
     }
 
     /**

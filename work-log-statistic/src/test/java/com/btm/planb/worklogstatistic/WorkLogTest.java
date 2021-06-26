@@ -16,7 +16,7 @@ public class WorkLogTest {
         try {
             List<WorkLogStandLine> analysis = workLog.analysis("/Users/houdawei/Desktop/workLog.txt");
             System.out.println(analysis);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
