@@ -11,6 +11,7 @@
     <modules>
         <module>work-log-statistic</module>
         <module>export-excel</module>
+        <module>export-pdf</module>
         <module>time-util</module>
         <module>demo</module>
     </modules>
@@ -35,6 +36,11 @@
             </dependency>
             <dependency>
                 <groupId>com.btm.planb</groupId>
+                <artifactId>export-pdf</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
                 <artifactId>time-util</artifactId>
                 <version>${plan-b.version}</version>
             </dependency>
@@ -52,6 +58,21 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>5.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.itextpdf</groupId>
+                <artifactId>itextpdf</artifactId>
+                <version>5.5.13.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.itextpdf.tool</groupId>
+                <artifactId>xmlworker</artifactId>
+                <version>5.5.13.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.itextpdf</groupId>
+                <artifactId>itext-asian</artifactId>
+                <version>5.2.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

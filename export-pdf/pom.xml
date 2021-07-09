@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.btm.planb</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>export-pdf</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,20 +19,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>work-log-statistic</artifactId>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-excel</artifactId>
+            <groupId>com.itextpdf.tool</groupId>
+            <artifactId>xmlworker</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-pdf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>time-util</artifactId>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-asian</artifactId>
         </dependency>
     </dependencies>
 
