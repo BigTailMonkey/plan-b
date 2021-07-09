@@ -44,29 +44,31 @@ public class Analysister {
         // 若能提取到关键节点信息则进行处理
         standLine = extractMainInfo(standLine, oneLineLog);
         // 设置所属项目集
-        standLine.setProgramName(programGroup);
+        standLine = setProgramName(standLine, programGroup);
         // 判定是否为重点项目
         standLine.setMajorProgram(WorkLog.workLogProperties.get().isMainProgram(standLine.getWorkInfo()));
         return standLine;
     }
 
     /**
-     * 查找节点信息
-     *
-     * @param oneLineLog 工作日志内容
-     * @return 节点信息
+     * 设置项目集名称
+     * @param standLine 标准工作日志行
+     * @param defaultProgramName 默认项目集名称
+     * @return 标准日志行
      */
-    @Deprecated
-    public INode findKeyNode(String oneLineLog) {
-        NodeChain nodeChain = new NodeChain();
-        oneLineLog = oneLineLog.replace(" ", "");
-        Pattern pattern = Pattern.compile(flagSign);
-        Matcher matcher = pattern.matcher(oneLineLog);
-        while (matcher.find()) {
-            String flagStr = matcher.group();
-            return nodeChain.findNode(flagStr, null);
+    public WorkLogStandLine setProgramName(WorkLogStandLine standLine, String defaultProgramName) {
+        standLine.setProgramName(defaultProgramName);
+        String workInfo = standLine.getWorkInfo();
+        Matcher matcher = Pattern.compile("^[\\[【].+?[】\\]]").matcher(workInfo);
+        if (matcher.find()) {
+            String programName = matcher.group();
+            programName = programName.substring(1, Math.max(programName.length() - 1, 1));
+            System.out.println(programName);
+            if (WorkLog.workLogProperties.get().isMainProgram(programName)) {
+                standLine.setProgramName(programName);
+            }
         }
-        return null;
+        return standLine;
     }
 
     /**

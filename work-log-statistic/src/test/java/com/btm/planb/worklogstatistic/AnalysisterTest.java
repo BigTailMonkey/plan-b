@@ -14,54 +14,6 @@ public class AnalysisterTest {
     }
 
     @Test
-    public void findFlanIndexOfLine() {
-        String regx = "[（\\(]\\S*[1-9]{1,2}月\\d+[日号]\\S*[\\)）]|[（\\(]\\S*[01]{0,1}[1-9]{1,2}-[01]{0,1}[1-9]{1,2}\\S*[\\)）]";
-        Analysister analysister = new Analysister(regx);
-        INode flanIndexOfLine = analysister.findKeyNode("(5月12日)");
-        Assert.assertNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("(5月12日上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("( 5月12日)");
-        Assert.assertNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("( 5月12日上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("( 5月12日 )");
-        Assert.assertNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("( 5月12日 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("(  5月12日  )");
-        Assert.assertNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("(  5月12日  发布)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("(将于5月12日上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(将于5月12日上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述（将于5月12日上线）");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述（将于5月12日上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(2021-01-01上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述( 2021-01-01上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(  2021-01-01  上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(2021-01-01 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(2021年01月01日 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(01-01 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(1-01 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述(1-1 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-        flanIndexOfLine = analysister.findKeyNode("需求内容描述( 1-1 上线)");
-        Assert.assertNotNull(flanIndexOfLine);
-    }
-
-    @Test
     public void testStatistic() {
         NodeChain nodeChain = new NodeChain();
         String demandNumberRegex = "^[tT][Bb]-\\d{1,5}";

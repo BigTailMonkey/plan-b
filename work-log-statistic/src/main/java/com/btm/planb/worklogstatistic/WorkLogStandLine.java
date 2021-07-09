@@ -77,8 +77,12 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
     }
 
     @ExcelHeader("工作内容")
-    public String getWorkInfo() {
+    public String getWorkInfoExport() {
         return (Objects.isNull(demandNumber) ? "" : demandNumber + " ") + workInfo;
+    }
+
+    public String getWorkInfo() {
+        return Objects.isNull(workInfo) ? "" : this.workInfo;
     }
 
     @ExcelHeader("项目集")

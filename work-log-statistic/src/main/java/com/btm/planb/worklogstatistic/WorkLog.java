@@ -36,8 +36,10 @@ public class WorkLog {
             String programGroup = "";
             while ((line = in.readLine()) != null) {
                 if (logLineProperties.isProgramGroup(line)) {
+                    // 项目集名称行
                     programGroup = line;
                 } else if (distinguishRealWorkLog(line)) {
+                    // 日志消息行
                     standLines.add(analysister.statistic(programGroup, line,"^[Bb][tT][Bb]-\\d{1,5}"));
                 }
             }
@@ -99,18 +101,17 @@ public class WorkLog {
 
     /**
      * 过滤是否有重复
-     * @param standLines
+     * @param standLines 标准日志文档
      */
     public void signDiffOrDeleteRepeat(List<WorkLogStandLine> standLines) {
         Set<String> singleLine = new HashSet<>();
         for (WorkLogStandLine standLine : standLines) {
-            if (Objects.nonNull(standLine.getDemandNumber()) && !"".equals(standLine.getDemandNumber())) {
-                if (singleLine.contains(standLine.getDemandNumber())) {
+            String repeatFlag = standLine.getProgramName() + standLine.getDemandNumber();
+                if (singleLine.contains(repeatFlag)) {
                     standLine.setErrorInfo("疑似重复");
                 } else {
-                    singleLine.add(standLine.getDemandNumber());
+                    singleLine.add(repeatFlag);
                 }
-            }
         }
     }
 
