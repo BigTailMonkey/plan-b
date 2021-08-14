@@ -20,7 +20,7 @@ public class ExportExcelDemo {
         String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()).toString() + ".xls";
 
         // 将Excel写入文件
-        Exporter exporter = new Exporter("项目集", "工作内容", "状态", "备注", "异常信息", "TB号","重点项目");
+        Exporter exporter = new Exporter("项目集", "工作内容", "状态", "重点项目", "备注", "异常信息", "TB号");
         HSSFWorkbook workbook = exporter.exportExcel(standLines, WorkLogStandLine.class);
         workbook.setSheetName(0, "sheetName");//设置sheet的Name
 
