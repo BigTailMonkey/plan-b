@@ -1,0 +1,26 @@
+# 访问接口域名
+host=http://
+# 系统验证登陆信息，若没有则直接忽略
+userName=
+password=
+needTicket=true
+# 以下为xxl-job的运行参数，等号前为参数名称，请勿修改，等号后为参数的值，需要修改为对应的值
+jobDesc=xxl-job描述
+# executorRouteStrategy：第一个——FIRST；最后一个——LAST；轮询——ROUND；随机——RANDOM
+executorRouteStrategy=FIRST
+jobCron=0 4/15 * * * ? *
+executorHandler=xxl-job的名称
+childJobId=
+# executorBlockStrategy：单机串行——SERIAL_EXECUTION；丢弃后续调度——DISCARD_LATER；覆盖之前调度-COVER——EARLY
+executorBlockStrategy=SERIAL_EXECUTION
+# executorFailStrategy：失败告警——FAIL_ALARM；失败重试——FAIL_RETRY
+executorFailStrategy=FAIL_ALARM
+author=负责人
+alarmEmail=
+alarmDingDing=
+registerAddress=
+id=xxl-job的id
+jobGroupId=xxl-job所属分组的id
+
+# executorParam=1
+#executorParam  此行以上为配置信息，此行以下为运行参数，一次运行的参数占用一行

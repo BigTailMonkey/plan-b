@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.btm.planb</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>xxljob-enhance</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,24 +19,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>work-log-statistic</artifactId>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-excel</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>export-pdf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>time-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.btm.planb</groupId>
-            <artifactId>xxljob-enhance</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
 

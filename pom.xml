@@ -14,6 +14,7 @@
         <module>export-pdf</module>
         <module>time-util</module>
         <module>demo</module>
+        <module>xxljob-enhance</module>
     </modules>
 
     <properties>
@@ -24,6 +25,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 本项目子包 -->
             <dependency>
                 <groupId>com.btm.planb</groupId>
                 <artifactId>work-log-statistic</artifactId>
@@ -50,6 +52,13 @@
                 <version>${plan-b.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>xxljob-enhance</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+
+            <!-- 三方依赖包 -->
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
@@ -73,6 +82,21 @@
                 <groupId>com.itextpdf</groupId>
                 <artifactId>itext-asian</artifactId>
                 <version>5.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.14.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.75</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
