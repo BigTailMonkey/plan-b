@@ -55,7 +55,7 @@ public class DateExtractor {
      * 批量解析
      *
      * @param strWithDate 包含"年月日"日期的字符串
-     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"会被识别为日期"6月2日"；false：不忽略小数点号分割的日期
+     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"不会被正确识别；false：不忽略小数点号分割的日期
      * @param interruptWithThrow true：当发生异常时中断解析；false：当发生异常时就捕获异常，继续后续的解析
      * @return 解析完成的'年月日'的日期
      */
@@ -113,7 +113,11 @@ public class DateExtractor {
      */
     public LocalDate translate(String dateStrings) throws DateFormatException{
         LocalDate result;
-        switch (EnumDateFormat.format(dateStrings)) {
+        EnumDateFormat dateFormat = EnumDateFormat.format(dateStrings);
+        if (Objects.isNull(dateFormat)) {
+            return null;
+        }
+        switch (dateFormat) {
             case YMD1:
             // yyyy-mm-dd
             String[] ymd1 = dateStrings.split("-");
@@ -172,7 +176,10 @@ public class DateExtractor {
             }
             int md_mm = Integer.parseInt(dateStrings.substring(0, md_m));
             int md_dd = Integer.parseInt(dateStrings.substring(md_m+1,md_d));
-            result = LocalDate.of(0, md_mm, md_dd);
+            result = LocalDate.of(LocalDate.now().getYear(), md_mm, md_dd);
+            if (result.isBefore(LocalDate.now())) {
+                result.plusYears(1);
+            }
             break;
             default:
             throw new DateFormatException("日期解析失败,解析不支持的时间："+dateStrings);

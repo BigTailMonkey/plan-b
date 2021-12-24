@@ -1,5 +1,6 @@
 package com.btm.planb.worklogstatistic;
 
+import com.btm.planb.timeutil.Constant;
 import com.btm.planb.timeutil.DateExtractor;
 import com.btm.planb.worklogstatistic.keyNode.INode;
 import com.btm.planb.worklogstatistic.keyNode.NodeChain;
@@ -13,14 +14,17 @@ import java.util.regex.Pattern;
 public class Analysister {
 
     private final String flagSign;
-    // 时间匹配 x月日，x月x号，xx-xx,yyyy-mm-dd，m.d日，m.d号
-    private static final String DATETIME_FLAG_REGX = "[1-9]{1,2}月[01]{0,1}[0-9]{1,2}|[01]{0,1}[1-9]{1,2}-[01]{0,1}[0-9]{1,2}|\\d{4}-[01]{0,1}[1-9]{1,2}-[01]{0,1}[0-9]{1,2}|[1-9]{1,2}\\.[01]{0,1}[0-9]{1,2}";
+    // 时间匹配
+    private static final String DATETIME_FLAG_REGX = Constant.DATE_FORMAT;
+    // 文字开头编号
     private static final String NUMBER_AS_INDEX = "^\\d{1,2}[\\.、]\\D";
+    // 文字开头与结尾的括号
+    private static final String BRACKETS = "^[(（]|[)）]$";
 
     private final DateExtractor dateExtractor = new DateExtractor();
 
     public Analysister() {
-        this.flagSign = "[（\\(]\\S*[1-9]{1,2}月\\d+\\S*[\\)）]|[（\\(]\\S*[01]{0,1}[1-9]{1,2}-[01]{0,1}[1-9]{1,2}\\S*[\\)）]|[（\\(]\\S*[01]{0,1}[1-9]{1,2}\\.[01]{0,1}[1-9]{1,2}\\S*[\\)）]";
+        this.flagSign = "[\\(|（][^\\)^）]*"+ Constant.DATE_FORMAT +"[^\\(^（]*[\\)|）]";
     }
 
     public Analysister(String flagSign) {
@@ -82,27 +86,31 @@ public class Analysister {
         NodeChain nodeChain = new NodeChain();
         Pattern pattern = Pattern.compile(flagSign);
         Matcher matcher = pattern.matcher(oneLineLog);
-        if (matcher.find()) {
-            String flagStr = matcher.group();
+        String flagStr = "";
+        while (matcher.find()) {
+            flagStr = matcher.group();
+        }
+        if (!"".equals(flagStr)) {
+            // 提取主要的关键节点信息原始数据，即将开头与结尾的括号去掉
+            String mainDate = flagStr.replaceAll(BRACKETS, "");
+            standLine.setFlagSourceInfo(mainDate);
+            // 解析关键节点信息中的时间信息
+            Pattern compile = Pattern.compile(DATETIME_FLAG_REGX);
+            Matcher dateMatcher = compile.matcher(mainDate);
+            if (dateMatcher.find()) {
+                String dateStr = dateMatcher.group();
+                standLine.setDatetime(dateExtractor.extractLast(dateStr));
+                INode keyNode = nodeChain.findNode(flagStr.substring(flagStr.indexOf(dateStr)), standLine.getDatetime());
+                standLine.setKeyNode(keyNode);
+            }
             // 找到关键节点信息，并将非关键节点信息之外的工作内容信息提取出来
             int flagIndex = oneLineLog.indexOf(flagStr);
             String workInfo = oneLineLog.substring(0, flagIndex);
             standLine.setWorkInfo(extractWorkInfo(workInfo));
-            // 提取主要的关键节点信息原始数据，即将开头与结尾的括号去掉
-            flagStr = flagStr.replaceAll("^[(（]|[)）]$", "");
-            standLine.setFlagSourceInfo(flagStr);
-            // 解析关键节点信息中的时间信息
-            Pattern compile = Pattern.compile(DATETIME_FLAG_REGX);
-            Matcher dateMatcher = compile.matcher(flagStr);
-            if (dateMatcher.find()) {
-                standLine.setDatetime(dateExtractor.extractLast(dateMatcher.group()));
-            }
-            INode keyNode = nodeChain.findNode(flagStr, standLine.getDatetime());
-            standLine.setKeyNode(keyNode);
-        } else {
-            standLine.setWorkInfo(extractWorkInfo(oneLineLog));
-            standLine.setErrorInfo("无关键时间节点信息");
+            return standLine;
         }
+        standLine.setWorkInfo(extractWorkInfo(oneLineLog));
+        standLine.setErrorInfo("无关键时间节点信息");
         return standLine;
     }
 

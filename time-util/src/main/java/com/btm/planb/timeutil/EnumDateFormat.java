@@ -2,22 +2,26 @@ package com.btm.planb.timeutil;
 
 import java.util.regex.Pattern;
 
+/**
+ * 时间格式枚举
+ */
 public enum EnumDateFormat {
 
-    YMD1("yyyy-mm-dd", "^[1-9]\\d{0,3}-(0?[1-9]|1\\d)-([12]\\d|0?[1-9])$"),
-    YMD2("yyyy/mm/dd", "^[1-9]\\d{0,3}/(0?[1-9]|1\\d)/([12]\\d|0?[1-9])$"),
-    YMD3("yyyy.mm.dd", "^[1-9]\\d{0,3}\\.(0?[1-9]|1\\d)\\.([12]\\d|0?[1-9])$"),
-    YMD4("yyyy年mm月dd日", "^[1-9]\\d{0,3}年(0?[1-9]|1\\d)月([12]\\d|0?[1-9])日$"),
-    YMD5("yyyy年mm月dd号", "^[1-9]\\d{0,3}年(0?[1-9]|1\\d)月([12]\\d|0?[1-9])号$"),
+    YMD1("(yy)yy-mm-dd", "^"+Constant.YEAR_FORMAT+"-"+Constant.MONTH_FORMAT+"-"+Constant.DAY_FORMAT+"$"),
+    YMD2("(yy)yy/mm/dd", "^"+Constant.YEAR_FORMAT+"/"+Constant.MONTH_FORMAT+"/"+Constant.DAY_FORMAT+"$"),
+    YMD3("(yy)yy.mm.dd", "^"+Constant.YEAR_FORMAT+"\\."+Constant.MONTH_FORMAT+"\\."+Constant.DAY_FORMAT+"$"),
+    YMD4("(yy)yy年mm月dd日", "^"+Constant.YEAR_FORMAT+"年"+Constant.MONTH_FORMAT+"月"+Constant.DAY_FORMAT+"日$"),
+    YMD5("(yy)yy年mm月dd号", "^"+Constant.YEAR_FORMAT+"年"+Constant.MONTH_FORMAT+"月"+Constant.DAY_FORMAT+"号$"),
 
-    MD1("mm-dd", "^(0?[1-9]|1\\d)-([12]\\d|0?[1-9])$"),
-    MD2("mm/dd", "^(0?[1-9]|1\\d)/([12]\\d|0?[1-9])$"),
-    MD3("mm.dd", "^(0?[1-9]|1\\d)\\.([12]\\d|0?[1-9])$"),
-    MD4("mm月dd日", "^(0?[1-9]|1\\d)月([12]\\d|0?[1-9])日$"),
-    MD5("mm月dd号", "^(0?[1-9]|1\\d)月([12]\\d|0?[1-9])号$"),
-    MD6("mm月dd", "^(0?[1-9]|1\\d)月([12]\\d|0?[1-9])$"),
+    MD1("mm-dd", "^"+Constant.MONTH_FORMAT+"-"+Constant.DAY_FORMAT+"$"),
+    MD2("mm/dd", "^"+Constant.MONTH_FORMAT+"/"+Constant.DAY_FORMAT+"$"),
+    MD3("mm.dd", "^"+Constant.MONTH_FORMAT+"\\."+Constant.DAY_FORMAT+"$"),
+    MD4("mm月dd日", "^"+Constant.MONTH_FORMAT+"月"+Constant.DAY_FORMAT+"日$"),
+    MD5("mm月dd号", "^"+Constant.MONTH_FORMAT+"月"+Constant.DAY_FORMAT+"号$"),
+    MD6("mm月dd", "^"+Constant.MONTH_FORMAT+"月"+Constant.DAY_FORMAT+"$"),
     ;
-
+    
+    
     /**
      * 日期格式
      */
@@ -38,7 +42,7 @@ public enum EnumDateFormat {
                 return dateFormat;
             }
         }
-        throw new DateFormatException("日期解析失败,解析不支持的时间："+dateStrings);
+        return null;
     }
 
     public String getFormat() {

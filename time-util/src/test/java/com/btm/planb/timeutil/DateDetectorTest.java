@@ -54,6 +54,21 @@ public class DateDetectorTest {
         strings = DateDetector.hasDateString("这是一个新的需求 （2021年6月2日 上线）", false);
         Assert.assertEquals(1L, strings.size());
         Assert.assertEquals("2021年6月2日", strings.get(0));
+        strings = DateDetector.hasDateString("这是一个新的需求 （2021年6月30日 上线）", false);
+        Assert.assertEquals(1L, strings.size());
+        Assert.assertEquals("2021年6月30日", strings.get(0));
+        strings = DateDetector.hasDateString("这是一个新的需求 （2021年12月21日 上线）", false);
+        Assert.assertEquals(1L, strings.size());
+        Assert.assertEquals("2021年12月21日", strings.get(0));
+        strings = DateDetector.hasDateString("这是一个新的需求 （21.11.04 上线）", false);
+        Assert.assertEquals(1L, strings.size());
+        Assert.assertEquals("21.11.04", strings.get(0));
+        strings = DateDetector.hasDateString("这是一个新的需求 （21.11.4 上线）", false);
+        Assert.assertEquals(1L, strings.size());
+        Assert.assertEquals("21.11.4", strings.get(0));
+        strings = DateDetector.hasDateString("这是一个新的需求 （6.12 上线）", true);
+        Assert.assertEquals(1L, strings.size());
+        Assert.assertEquals("12", strings.get(0));
     }
 
     @Test

@@ -7,7 +7,7 @@ public class XxljobEnhanceDemo {
 
     public static void main(String[] args) {
         SimpleStart simpleStart = new SimpleStart();
-        simpleStart.run("/tmp/java_space/Param.txt");
+        simpleStart.run("temp/Param.txt");
     }
 
 }

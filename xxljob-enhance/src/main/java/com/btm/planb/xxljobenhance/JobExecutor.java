@@ -24,7 +24,10 @@ public class JobExecutor {
     }
 
     /**
-     * 执行命令
+     * 执行命令<br/>
+     * 先调用xxl-job参数修改接口，修改后等待300ms
+     * 在调用xxl-job执行接口
+     *
      * @param host host地址
      * @param xxljobParam 定时任务的参数
      * @param executeParam 执行参数
@@ -35,10 +38,24 @@ public class JobExecutor {
         if (CollectionUtils.isEmpty(executeParam) || Objects.isNull(xxljobParam)) {
             throw new JobExecuteFailException("定时任务执行参数为空");
         }
+        boolean checkUpdateParameter = true;
         try {
             for (int i = 0; i < executeParam.size(); i++) {
                 Connection updateParamConnection = buildConnect(MessageFormat.format(rescheduleUrl, host), xxljobParam.updateExecutorParam(executeParam.get(i)));
                 if (doExecuteWithPost(updateParamConnection)) {
+                    // 修改参数后，间隔500ms再执行后续动作
+                    Thread.sleep(1000);
+                    if (checkUpdateParameter) {
+                        System.out.println("请检查["+xxljobParam.getJobDesc()+"]的参数设置是否正确？(y/n)");
+                        Scanner reader = new Scanner(System.in);
+                        String c = reader.nextLine();
+                        if (!"y".equalsIgnoreCase(c)) {
+                            System.out.println("任务调用被手动中止。");
+                            return;
+                        } else {
+                            checkUpdateParameter = false;
+                        }
+                    }
                     Map<String, String> dataMap = new HashMap<>();
                     dataMap.put("id",xxljobParam.getId());
                     Connection executeConnection = buildConnect(MessageFormat.format(triggerUrl, host), dataMap);
@@ -71,7 +88,7 @@ public class JobExecutor {
                 }
             }
             System.out.println("全部参数已全部执行完成");
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

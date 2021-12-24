@@ -1,26 +1,37 @@
-# 访问接口域名
-host=http://
-# 系统验证登陆信息，若没有则直接忽略
+# xxl-job服务的域名
+host=
+# 系统验证登陆信息（用户名和密码），若没有则直接忽略
 userName=
 password=
+# 是否需要验证信息，默认是都需要的。如需要验证信息，则必须提供用户名密码
 needTicket=true
 # 以下为xxl-job的运行参数，等号前为参数名称，请勿修改，等号后为参数的值，需要修改为对应的值
-jobDesc=xxl-job描述
-# executorRouteStrategy：第一个——FIRST；最后一个——LAST；轮询——ROUND；随机——RANDOM
-executorRouteStrategy=FIRST
-jobCron=0 4/15 * * * ? *
-executorHandler=xxl-job的名称
-childJobId=
-# executorBlockStrategy：单机串行——SERIAL_EXECUTION；丢弃后续调度——DISCARD_LATER；覆盖之前调度-COVER——EARLY
-executorBlockStrategy=SERIAL_EXECUTION
-# executorFailStrategy：失败告警——FAIL_ALARM；失败重试——FAIL_RETRY
-executorFailStrategy=FAIL_ALARM
-author=负责人
-alarmEmail=
-alarmDingDing=
-registerAddress=
+# （必填）任务ID，可在任务管理页查看或http请求体中查看
 id=xxl-job的id
+# （必填）执行器ID，可在浏览器的地址栏查看或http请求体中查看
 jobGroupId=xxl-job所属分组的id
+# （必填）任务描述
+jobDesc=xxl-job描述
+# （必填）JobHandler
+executorHandler=xxl-job的名称
+# （必填）负责人
+author=负责人
+# （非必填）路由策略（executorRouteStrategy）：第一个——FIRST；最后一个——LAST；轮询——ROUND；随机——RANDOM
+executorRouteStrategy=FIRST
+# （非必填）Cron
+jobCron=0 4/15 * * * ? *
+# （非必填）子任务ID
+childJobId=
+# （非必填）阻塞处理策略（executorBlockStrategy）：单机串行——SERIAL_EXECUTION；丢弃后续调度——DISCARD_LATER；覆盖之前调度-COVER——EARLY
+executorBlockStrategy=SERIAL_EXECUTION
+# （非必填）失败处理策略（executorFailStrategy）：失败告警——FAIL_ALARM；失败重试——FAIL_RETRY
+executorFailStrategy=FAIL_ALARM
+# （非必填）报警邮件
+alarmEmail=
+# （非必填）钉钉报警
+alarmDingDing=
+# （非必填）注册地址，附加字段，无用可不传
+registerAddress=
 
-# executorParam=1
+# （必填）executorParam=1
 #executorParam  此行以上为配置信息，此行以下为运行参数，一次运行的参数占用一行

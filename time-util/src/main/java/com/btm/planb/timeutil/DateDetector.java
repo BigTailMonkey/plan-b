@@ -17,14 +17,14 @@ public class DateDetector {
      * 从字符串中识别并提取日期字符串，如果有则返回匹配到的日期
      *
      * @param strWithDate 包含"年月日"日期的字符串
-     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"会被识别为日期"6月2日"；false：不忽略小数点号分割的日期
+     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"不会被正切识别；false：不忽略小数点号分割的日期
      * @return 从字符串中识别到的所有字符串，若没有匹配到则返回长度为零的集合
      */
     public static List<String> hasDateString(String strWithDate, boolean ignoreDecimal) {
         List<String> result = new ArrayList<>();
-        String dateFormatRegex = "([1-9]\\d{0,3})?[-年/\\.]?(0?[1-9]|1\\d)[-月/\\.]?([12]\\d|0?[1-9])[日号]?";
+        String dateFormatRegex = Constant.DATE_FORMAT;
         if (ignoreDecimal) {
-            dateFormatRegex = "([1-9]\\d{0,3})?[-年/]?(0?[1-9]|1\\d)[-月/]?([12]\\d|0?[1-9])[日号]?";
+            dateFormatRegex = Constant.DATE_FORMAT_IGNORE_DECIMAL;
         }
         Pattern compile = Pattern.compile(dateFormatRegex);
         Matcher matcher = compile.matcher(strWithDate);
@@ -34,6 +34,12 @@ public class DateDetector {
         return result;
     }
 
+    /**
+     * 当从被解析的字符串中能解析出多个日期时，只返回第一个日期
+     * @param strWithDate 被解析的字符串
+     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"不会被正切识别；false：不忽略小数点号分割的日期
+     * @return 日期
+     */
     public static String firstDateString(String strWithDate, boolean ignoreDecimal) {
         List<String> result = hasDateString(strWithDate, ignoreDecimal);
         if (0 < result.size()) {
@@ -42,6 +48,12 @@ public class DateDetector {
         return null;
     }
 
+    /**
+     * 当从被解析的字符串中能解析出多个日期时，只返回最后一个日期
+     * @param strWithDate 被解析的字符串
+     * @param ignoreDecimal true：忽小数点分割的日期格式，即"6.12"不会被正切识别；false：不忽略小数点号分割的日期
+     * @return 日期
+     */
     public static String lastDateString(String strWithDate, boolean ignoreDecimal) {
         List<String> result = hasDateString(strWithDate, ignoreDecimal);
         if (0 < result.size()) {

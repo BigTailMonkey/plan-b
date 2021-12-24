@@ -11,7 +11,7 @@ public class SimpleStart {
         ParamParser paramParser = new ParamParser(paramFilePath);
         XxljobParam param = paramParser.getXxljobParam();
         String host = param.getHost();
-        System.out.println("参数解析完成，执行登陆操作…………");
+        System.out.println("参数解析完成，定时任务执行器地址:["+host+"]，执行登陆操作…………");
         if (param.isNeedTicket()) {
             // 执行登陆动作，拿到登陆信息
             LoginProxy<String> loginProxy = new OOSLoginProxy();

@@ -6,6 +6,7 @@ import com.btm.planb.xxljobenhance.exceptions.JobExecuteFailException;
 import com.btm.planb.xxljobenhance.model.JobInfo;
 import com.btm.planb.xxljobenhance.model.XxljobParam;
 import org.jsoup.Connection;
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
@@ -27,16 +28,60 @@ public class JobListReader {
         return this.ticket;
     }
 
+    /**
+     * 校验查询到的xxl-job任务信息与输入的信息是否一致，校验项有：
+     * <li>id-任务ID</li>
+     * <li>jobDoc-任务描述</li>
+     * <li>author-责任人</li>
+     * @param host xxl-job服务地址
+     * @param param 配置文件
+     * @return
+     */
     public boolean checkJobInfo(String host, XxljobParam param) {
         JobInfo jobInfo = parseJobPageListElement(host, param.getJobGroupId(), param.getExecutorHandler());
         if (Objects.isNull(jobInfo)) {
             return false;
         }
-        return param.getId().equals(String.valueOf(jobInfo.getId()))
+        if (param.getId().equals(String.valueOf(jobInfo.getId()))
                 && param.getJobDesc().equals(jobInfo.getJobDesc())
-                && param.getAuthor().equals(jobInfo.getAuthor());
+                && param.getAuthor().equals(jobInfo.getAuthor())) {
+            if (StringUtil.isBlank(param.getAlarmDingDing())) {
+                param.setAlarmDingDing(jobInfo.getAlarmDingDing());
+            }
+            if (StringUtil.isBlank(param.getAlarmEmail())) {
+                param.setAlarmDingDing(jobInfo.getAlarmEmail());
+            }
+            if (StringUtil.isBlank(param.getChildJobId())) {
+                param.setChildJobId(jobInfo.getChildJobId());
+            }
+            if (StringUtil.isBlank(param.getExecutorBlockStrategy())) {
+                param.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
+            }
+            if (StringUtil.isBlank(param.getExecutorFailStrategy())) {
+                param.setExecutorFailStrategy(jobInfo.getExecutorFailStrategy());
+            }
+            if (StringUtil.isBlank(param.getExecutorRouteStrategy())) {
+                param.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
+            }
+            if (StringUtil.isBlank(param.getJobCron())) {
+                param.setJobCron(jobInfo.getJobCron());
+            }
+            if (StringUtil.isBlank(param.getRegisterAddress())) {
+                param.setRegisterAddress(jobInfo.getRegisterAddress());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    /**
+     * 根据执行器ID和定时任务的名称（jobHandler）查询定时任务信息
+     * @param host xxl-job服务地址
+     * @param jobGroupId 执行期ID
+     * @param executorHandler jobHandler，定时任务的名称
+     * @return
+     */
     public JobInfo parseJobPageListElement(String host, String jobGroupId, String executorHandler) {
         try {
             Document post = reader(host, jobGroupId, executorHandler);
@@ -54,7 +99,15 @@ public class JobListReader {
         return null;
     }
 
-    public Document reader(String host, String jobGroupId, String executorHandler) throws IOException {
+    /**
+     * 查询定时任务信息
+     * @param host xxl-job服务地址
+     * @param jobGroupId 执行器ID
+     * @param executorHandler 定时任务名称
+     * @return
+     * @throws IOException
+     */
+    private Document reader(String host, String jobGroupId, String executorHandler) throws IOException {
         String url = MessageFormat.format(pageListUrl, host);
         Connection connection = ConnectionUtil.buildPostConnection(url, buildData(jobGroupId, executorHandler), ticket);
         return connection.post();

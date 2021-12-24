@@ -41,7 +41,7 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
     private INode keyNode;
 
     // 关键节点信息的原始数据
-    // 关键节点信息要位于日志的结尾，使用括号标示并要含有时间信息
+    // 关键节点信息要位于每一行日志的结尾，使用括号标示并要含有时间信息
     private String flagSourceInfo;
 
     // 重点项目
@@ -111,7 +111,10 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
 
     @ExcelHeader("状态")
     public String getFlag() {
-        return Objects.isNull(keyNode) ? "" : keyNode.getNodeDesc();
+        if (Objects.nonNull(keyNode)) {
+            return keyNode.getNodeDesc();
+        }
+        return "";
     }
 
     public void setKeyNode(INode keyNode) {
@@ -147,9 +150,9 @@ public class WorkLogStandLine implements Comparable<WorkLogStandLine> {
     public String remark() {
         if (Objects.nonNull(datetime) && Objects.nonNull(keyNode)) {
             if (datetime.isAfter(LocalDate.now())) {
-                return getDatetimeStr() + " " + this.keyNode.getNextNodeDesc();
+                return getDatetimeStr() + " " + this.keyNode.getNextNodeDescAlias();
             } else {
-                return getDatetimeStr() + " " + this.keyNode.getNodeDesc();
+                return getDatetimeStr() + " " + this.keyNode.getNodeDescAlias();
             }
         }
         return getFlagSourceInfo();

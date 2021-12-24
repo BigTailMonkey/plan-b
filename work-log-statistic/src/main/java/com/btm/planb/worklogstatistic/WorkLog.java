@@ -1,6 +1,6 @@
 package com.btm.planb.worklogstatistic;
 
-import com.sun.deploy.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -80,7 +80,7 @@ public class WorkLog {
             if (Objects.nonNull(annotation)) {
                 String property = properties.getProperty(annotation.value());
                 if (Objects.nonNull(property) && property.length() > 0) {
-                    String[] strings = StringUtils.splitString(property, ",");
+                    String[] strings = StringUtils.split(property, ",");
                     field.set(logLineProperties,strings);
                 }
             }
