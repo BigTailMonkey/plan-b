@@ -43,8 +43,8 @@ public class JobExecutor {
             for (int i = 0; i < executeParam.size(); i++) {
                 Connection updateParamConnection = buildConnect(MessageFormat.format(rescheduleUrl, host), xxljobParam.updateExecutorParam(executeParam.get(i)));
                 if (doExecuteWithPost(updateParamConnection)) {
-                    // 修改参数后，间隔500ms再执行后续动作
-                    Thread.sleep(1000);
+                    // 修改参数后，间隔2秒再执行后续动作
+                    Thread.sleep(2000);
                     if (checkUpdateParameter) {
                         System.out.println("请检查["+xxljobParam.getJobDesc()+"]的参数设置是否正确？(y/n)");
                         Scanner reader = new Scanner(System.in);

@@ -222,7 +222,9 @@ public class XxljobParam {
         dataMap.put("author", getAuthor());
         dataMap.put("alarmEmail", getAlarmEmail());
         dataMap.put("alarmDingDing", getAlarmDingDing());
-        dataMap.put("registerAddress", getRegisterAddress());
+        if (Objects.nonNull(getRegisterAddress())) {
+            dataMap.put("registerAddress", getRegisterAddress());
+        }
         dataMap.put("id", getId());
         return dataMap;
     }

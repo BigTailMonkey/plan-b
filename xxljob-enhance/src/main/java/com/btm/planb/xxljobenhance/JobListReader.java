@@ -87,8 +87,11 @@ public class JobListReader {
             Document post = reader(host, jobGroupId, executorHandler);
             if (200 == post.connection().response().statusCode()) {
                 Object data = JSON.parseObject(post.body().text()).get("data");
-                JSONArray jsonObject = JSON.parseObject(String.valueOf(data), JSONArray.class);
-                return jsonObject.getObject(0, JobInfo.class);
+                JSONArray jsonArray = JSON.parseObject(String.valueOf(data), JSONArray.class);
+                if (Objects.isNull(jsonArray) || jsonArray.isEmpty()) {
+                    throw new JobExecuteFailException("未查询到定时任务执行器");
+                }
+                return jsonArray.getObject(0, JobInfo.class);
             } else {
                 System.out.println(post);
                 throw new JobExecuteFailException("接口响应码错误");
