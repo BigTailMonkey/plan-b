@@ -40,7 +40,7 @@ public class WorkLog {
                     programGroup = line;
                 } else if (distinguishRealWorkLog(line)) {
                     // 日志消息行
-                    standLines.add(analysister.statistic(programGroup, line,"^[Bb][tT][Bb]-\\d{1,5}"));
+                    standLines.add(analysister.statistic(programGroup, line,"^[Bb][tT2][Bb]-\\d{1,5}"));
                 }
             }
         } finally {
