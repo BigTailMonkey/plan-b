@@ -15,6 +15,7 @@
         <module>time-util</module>
         <module>demo</module>
         <module>xxljob-enhance</module>
+        <module>parallel-framework</module>
     </modules>
 
     <properties>

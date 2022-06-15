@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 时间重合判定工具
+ */
 public class TimeCoincideDetect {
 
     /**
@@ -45,6 +48,20 @@ public class TimeCoincideDetect {
         return null;
     }
 
+    /**
+     * 是否有时间重叠
+     * @param periods 时间段
+     * @return true：有重叠；false：无重叠
+     */
+    public boolean hasCoincide(List<IPeriod> periods) {
+        return Objects.isNull(detect(periods, 0));
+    }
+
+    /**
+     * 模型转换
+     * @param periods 时间段
+     * @return 转换结果
+     */
     private List<PeriodDetectInfoModel> transform(List<IPeriod> periods) {
         if (Objects.isNull(periods) || periods.isEmpty()) {
             return Collections.emptyList();
