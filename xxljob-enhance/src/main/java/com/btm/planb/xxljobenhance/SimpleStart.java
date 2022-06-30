@@ -17,7 +17,8 @@ public class SimpleStart {
             LoginProxy<String> loginProxy = new LoginProxy<String>() {
                 @Override
                 public String getLoginTicket(String host, XxljobParam param) {
-                    return null;
+                    // 实现LoginProxy接口，编写登陆令牌获取逻辑代码，替换此部分后再打包使用
+                    throw new NullPointerException("请编辑登陆令牌获取逻辑");
                 }
             };
             ticket = loginProxy.getLoginTicket(host, param);
