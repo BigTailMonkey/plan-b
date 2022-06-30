@@ -1,7 +1,5 @@
 package com.btm.planb.parallelframework;
 
-import com.sun.tools.javac.util.Assert;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -40,7 +38,9 @@ public class TaskGroupManager {
     }
 
     public <V> Carrier execute(String taskGroupName, Parameter parameter, V result) {
-        Assert.check(taskGroups.containsKey(taskGroupName));
+        if (!taskGroups.containsKey(taskGroupName)) {
+            throw new RuntimeException("未找到任务组：" + taskGroupName);
+        }
         TaskGroup taskGroup = taskGroups.get(taskGroupName);
         Carrier carrier = new Carrier(parameter, result, taskGroup.taskNumber());
         try {

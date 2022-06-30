@@ -14,7 +14,12 @@ public class SimpleStart {
         System.out.println("参数解析完成，定时任务执行器地址:["+host+"]，执行登陆操作…………");
         if (param.isNeedTicket()) {
             // 执行登陆动作，拿到登陆信息
-            LoginProxy<String> loginProxy = new OOSLoginProxy();
+            LoginProxy<String> loginProxy = new LoginProxy<String>() {
+                @Override
+                public String getLoginTicket(String host, XxljobParam param) {
+                    return null;
+                }
+            };
             ticket = loginProxy.getLoginTicket(host, param);
             if (Objects.isNull(ticket)) {
                 System.out.println("登陆失败，请检查登陆信息是否正确、有效");

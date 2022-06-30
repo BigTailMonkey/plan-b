@@ -1,7 +1,6 @@
 package com.btm.planb.parallelframework;
 
-import com.sun.tools.javac.util.Assert;
-
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 public class Carrier<V> {
@@ -31,7 +30,9 @@ public class Carrier<V> {
     }
 
     public Parameter getParameter() {
-        Assert.checkNonNull(this.parameter);
+        if (Objects.isNull(this.parameter)) {
+            throw new NullPointerException("参数不能为空");
+        }
         return this.parameter;
     }
 

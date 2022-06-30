@@ -1,7 +1,5 @@
 package com.btm.planb.parallelframework;
 
-import com.sun.tools.javac.util.Assert;
-
 import java.util.Objects;
 
 
@@ -39,7 +37,9 @@ public abstract class AbstractTaskThread implements Runnable {
 
     @Override
     public void run() {
-        Assert.checkNonNull(this.carrier);
+        if (Objects.isNull(this.carrier)) {
+            throw new NullPointerException();
+        }
         try {
             if (this.carrier.hasException()) {
                 return;
