@@ -38,6 +38,10 @@
             <groupId>com.btm.planb</groupId>
             <artifactId>xxljob-enhance</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.btm.planb</groupId>
+            <artifactId>stream-condition</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

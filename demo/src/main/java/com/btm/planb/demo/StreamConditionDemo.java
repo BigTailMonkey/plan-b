@@ -1,8 +1,8 @@
-package com.btm.planb.streamcondition;
+package com.btm.planb.demo;
 
-import com.btm.planb.streamcondition.core.ConditionBuilder;
+import com.btm.planb.streamcondition.ConditionBuilder;
 
-public class Demo {
+public class StreamConditionDemo {
 
     public static void main(String[] args) {
         ConditionBuilder conditionBuilder = new ConditionBuilder();

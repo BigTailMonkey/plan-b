@@ -1,5 +1,6 @@
 package com.btm.planb.streamcondition.core;
 
+import com.btm.planb.streamcondition.ConditionBuilder;
 import com.btm.planb.streamcondition.core.constant.NodeType;
 import com.btm.planb.streamcondition.core.constant.SymbolType;
 import com.btm.planb.streamcondition.core.tree.AbstractNode;

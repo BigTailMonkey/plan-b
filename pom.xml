@@ -58,6 +58,11 @@
                 <artifactId>xxljob-enhance</artifactId>
                 <version>${plan-b.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>stream-condition</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <!-- 三方依赖包 -->
             <dependency>

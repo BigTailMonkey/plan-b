@@ -1,5 +1,7 @@
-package com.btm.planb.streamcondition.core;
+package com.btm.planb.streamcondition;
 
+import com.btm.planb.streamcondition.core.AbstractCondition;
+import com.btm.planb.streamcondition.core.ConditionManager;
 import com.btm.planb.streamcondition.core.constant.NodeType;
 import com.btm.planb.streamcondition.core.constant.RelationType;
 import com.btm.planb.streamcondition.core.impl.ConditionPrice;

@@ -1,7 +1,7 @@
 package com.btm.planb.streamcondition.core.impl;
 
 import com.btm.planb.streamcondition.core.AbstractCondition;
-import com.btm.planb.streamcondition.core.ConditionBuilder;
+import com.btm.planb.streamcondition.ConditionBuilder;
 
 import java.util.Arrays;
 
