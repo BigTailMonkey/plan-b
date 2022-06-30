@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 public class ConditionBuilder {
 
     private AbstractNode current;
-    private ConditionManager conditionManager = new ConditionManager();
+    private final ConditionManager conditionManager = new ConditionManager();
 
     public ConditionBuilder() {
     }
@@ -76,15 +76,31 @@ public class ConditionBuilder {
         return this.current.toString();
     }
 
-    public AbstractCondition use(String name) {
+    public void checkCurrentNodeIsField() {
         if (Objects.nonNull(this.current) && NodeType.FIELD.equals(this.current.getNodeType())) {
             throw new RuntimeException("逻辑关系错误");
         }
+    }
+
+    /**可支持更对条件对象，但对编译器不友好**/
+    public AbstractCondition use(String name) {
+        checkCurrentNodeIsField();
         try {
-            Class t = conditionManager.get(name);
-            return (AbstractCondition)(t.getConstructor(ConditionBuilder.class).newInstance(this));
+            Class<? extends AbstractCondition<?>> t = conditionManager.get(name);
+            return t.getConstructor(ConditionBuilder.class).newInstance(this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**推荐使用一下方式，但要注意不要超过java文件限制**/
+    public ConditionPrice price() {
+        checkCurrentNodeIsField();
+        return new ConditionPrice(this);
+    }
+
+    public ConditionType type() {
+        checkCurrentNodeIsField();
+        return new ConditionType(this);
     }
 }
