@@ -16,41 +16,20 @@ public abstract class AbstractCondition<T> {
     }
 
     public ConditionBuilder eq(T t) {
-        LogicNode<T> newNode = value(t);
+        LogicNode newNode = new LogicNode(fileName(), value(t));
         newNode.setSymbolType(SymbolType.EQ);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
-    public ConditionBuilder gt(T t) {
-        LogicNode<T> newNode = value(t);
-        newNode.setSymbolType(SymbolType.GT);
+    public ConditionBuilder in(T... t) {
+        LogicNode newNode = new LogicNode(fileName(), values(t));
+        newNode.setSymbolType(SymbolType.IN);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
-    public ConditionBuilder gte(T t) {
-        LogicNode<T> newNode = value(t);
-        newNode.setSymbolType(SymbolType.GTE);
-        checkAndSet(newNode);
-        return this.conditionBuilder;
-    }
-
-    public ConditionBuilder lt(T t) {
-        LogicNode<T> newNode = value(t);
-        newNode.setSymbolType(SymbolType.LT);
-        checkAndSet(newNode);
-        return this.conditionBuilder;
-    }
-
-    public ConditionBuilder lte(T t) {
-        LogicNode<T> newNode = value(t);
-        newNode.setSymbolType(SymbolType.LTE);
-        checkAndSet(newNode);
-        return this.conditionBuilder;
-    }
-
-    private void checkAndSet(LogicNode<T> newNode) {
+    private void checkAndSet(LogicNode newNode) {
         AbstractNode current = this.conditionBuilder.getCurrent();
         if (Objects.isNull(current)) {
             this.conditionBuilder.setCurrent(newNode);
@@ -61,5 +40,9 @@ public abstract class AbstractCondition<T> {
         }
     }
 
-    protected abstract LogicNode<T> value(T t);
+    protected abstract String value(T t);
+
+    protected abstract String values(T... t);
+
+    protected abstract String fileName();
 }

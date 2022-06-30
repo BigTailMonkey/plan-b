@@ -8,14 +8,14 @@ import java.util.Map;
 
 public class ConditionManager {
 
-    private static final Map<String, Class<? extends AbstractCondition<?>>> conditions = new HashMap<>();
+    private static final Map<String, Class<? extends AbstractCondition>> conditions = new HashMap<>();
 
     static {
         conditions.put("price", ConditionPrice.class);
         conditions.put("type", ConditionType.class);
     }
 
-    public Class<? extends AbstractCondition<?>> get(String name) {
+    public Class<? extends AbstractCondition> get(String name) {
         if (conditions.containsKey(name)) {
             return conditions.get(name);
         }

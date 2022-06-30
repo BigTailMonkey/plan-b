@@ -86,7 +86,7 @@ public class ConditionBuilder {
     public AbstractCondition use(String name) {
         checkCurrentNodeIsField();
         try {
-            Class<? extends AbstractCondition<?>> t = conditionManager.get(name);
+            Class<? extends AbstractCondition> t = conditionManager.get(name);
             return t.getConstructor(ConditionBuilder.class).newInstance(this);
         } catch (Exception e) {
             throw new RuntimeException(e);

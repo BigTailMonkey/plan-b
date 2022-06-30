@@ -2,7 +2,9 @@ package com.btm.planb.streamcondition.core.impl;
 
 import com.btm.planb.streamcondition.core.AbstractCondition;
 import com.btm.planb.streamcondition.core.ConditionBuilder;
-import com.btm.planb.streamcondition.core.tree.LogicNode;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 
 public class ConditionPrice extends AbstractCondition<Integer> {
@@ -12,7 +14,21 @@ public class ConditionPrice extends AbstractCondition<Integer> {
     }
 
     @Override
-    protected LogicNode<Integer> value(Integer integer) {
-        return new LogicNode<>("price",integer);
+    protected String fileName() {
+        return "price";
+    }
+
+    @Override
+    protected String value(Integer integer) {
+        return String.valueOf(integer);
+    }
+
+    @Override
+    protected String values(Integer... t) {
+        String s = Arrays.toString(t);
+        if (s.length() > 2) {
+            return s.substring(1, s.length() - 1);
+        }
+        return s;
     }
 }
