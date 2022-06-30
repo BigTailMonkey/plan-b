@@ -16,6 +16,7 @@
         <module>demo</module>
         <module>xxljob-enhance</module>
         <module>parallel-framework</module>
+        <module>stream-condition</module>
     </modules>
 
     <properties>
