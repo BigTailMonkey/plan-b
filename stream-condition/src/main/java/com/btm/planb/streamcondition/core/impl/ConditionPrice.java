@@ -12,7 +12,7 @@ public class ConditionPrice extends AbstractCondition<Integer> {
     }
 
     @Override
-    protected LogicNode<Integer> eqInner(Integer integer) {
+    protected LogicNode<Integer> value(Integer integer) {
         return new LogicNode<>("price",integer);
     }
 }

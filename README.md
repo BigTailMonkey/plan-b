@@ -24,3 +24,7 @@
 xxl-job批量参数执行工具  
 需要将相关参数写入resources/Param.txt文件中，并在运行时指定配置文件的位置。  
 若需要登陆验证则需要使用者自行继承LoginProxy接口实现登陆功能获取相关ticket，并且将配置文件中的needTicket指定为true；若不需要登陆则只需将配置文件中的needTicket指定为false即可。
+
+##### stream-condition
+流式条件编程框架  
+具体请参考模块下的Demo

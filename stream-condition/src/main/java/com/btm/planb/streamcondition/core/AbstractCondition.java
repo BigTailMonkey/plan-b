@@ -16,35 +16,35 @@ public abstract class AbstractCondition<T> {
     }
 
     public ConditionBuilder eq(T t) {
-        LogicNode<T> newNode = eqInner(t);
+        LogicNode<T> newNode = value(t);
         newNode.setSymbolType(SymbolType.EQ);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
     public ConditionBuilder gt(T t) {
-        LogicNode<T> newNode = eqInner(t);
+        LogicNode<T> newNode = value(t);
         newNode.setSymbolType(SymbolType.GT);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
     public ConditionBuilder gte(T t) {
-        LogicNode<T> newNode = eqInner(t);
+        LogicNode<T> newNode = value(t);
         newNode.setSymbolType(SymbolType.GTE);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
     public ConditionBuilder lt(T t) {
-        LogicNode<T> newNode = eqInner(t);
+        LogicNode<T> newNode = value(t);
         newNode.setSymbolType(SymbolType.LT);
         checkAndSet(newNode);
         return this.conditionBuilder;
     }
 
     public ConditionBuilder lte(T t) {
-        LogicNode<T> newNode = eqInner(t);
+        LogicNode<T> newNode = value(t);
         newNode.setSymbolType(SymbolType.LTE);
         checkAndSet(newNode);
         return this.conditionBuilder;
@@ -61,5 +61,5 @@ public abstract class AbstractCondition<T> {
         }
     }
 
-    protected abstract LogicNode<T> eqInner(T t);
+    protected abstract LogicNode<T> value(T t);
 }

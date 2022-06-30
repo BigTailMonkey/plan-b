@@ -11,7 +11,7 @@ public class ConditionType extends AbstractCondition<String> {
     }
 
     @Override
-    protected LogicNode<String> eqInner(String s) {
+    protected LogicNode<String> value(String s) {
         return new LogicNode<>("type", s);
     }
 }

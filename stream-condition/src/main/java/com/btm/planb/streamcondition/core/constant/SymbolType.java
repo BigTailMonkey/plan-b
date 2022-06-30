@@ -2,12 +2,13 @@ package com.btm.planb.streamcondition.core.constant;
 
 public enum SymbolType {
 
-    EQ(" = "),
-    GT(" > "),
-    GTE(" >= "),
-    LT(" < "),
-    LTE(" <= "),
-    IN(" in "),
+    EQ("="),
+    GT(">"),
+    GTE(">="),
+    LT("<"),
+    LTE("<="),
+    IN("in"),
+    NOT_IN("not in")
     ;
     private String symbol;
 
