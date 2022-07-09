@@ -28,3 +28,7 @@ xxl-job批量参数执行工具
 ##### stream-condition
 流式条件编程框架  
 具体请参考demo模块下的StreamConditionDemo类
+
+##### template-object
+差异对象生成工具  
+依赖于动态字节码编辑技术，javassist，动态生成差异对象

@@ -42,6 +42,10 @@
             <groupId>com.btm.planb</groupId>
             <artifactId>stream-condition</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.btm.planb</groupId>
+            <artifactId>diff-object-generate</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
