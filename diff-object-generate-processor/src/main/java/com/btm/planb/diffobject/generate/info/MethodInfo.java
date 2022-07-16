@@ -1,5 +1,7 @@
 package com.btm.planb.diffobject.generate.info;
 
+import com.btm.planb.diffobject.generate.contact.Contact;
+
 import javax.lang.model.element.Element;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,34 +10,34 @@ import java.util.Map;
 
 public class MethodInfo {
 
-    // 方法上注解信息
-    private final Map<String, SpecifyKeyInfo> specifyKeyInfo = new HashMap<>();
+    // 方法的返回值对象的字段信息
+    private final Map<String, ReturnFieldInfo> returnFieldInfos = new HashMap<>();
     // 方法的参数信息
     private final List<ParameterInfo> parameterInfos = new ArrayList<>();
-    // 方法的返回值信息
+    // 方法的返回值原属信息
     private Element returnTypeElement;
     // 方法的名称
     private final String methodName;
 
     // 方法返回值对象的名称
-    private static final String RETURN_VALUE_NAME = "$$result$$";
+    private static final String RETURN_VALUE_NAME = Contact.RETURN_VALUE_NAME;
     // 方法型参的变量命名前缀
-    private static final String PARAMETER_PREFIX = "$$parameter$$_";
+    private static final String PARAMETER_PREFIX = Contact.PARAMETER_PREFIX;
 
     public MethodInfo(String methodName) {
         this.methodName = methodName;
     }
 
-    public void addSpecifyKeyInfo(Map<String, SpecifyKeyInfo> infos) {
-        this.specifyKeyInfo.putAll(infos);
+    public void addSpecifyKeyInfo(Map<String, ReturnFieldInfo> infos) {
+        this.returnFieldInfos.putAll(infos);
     }
 
     public void setReturnTypeElement(Element returnTypeElement) {
         this.returnTypeElement = returnTypeElement;
     }
 
-    public Map<String, SpecifyKeyInfo> getSpecifyKeyInfo() {
-        return specifyKeyInfo;
+    public Map<String, ReturnFieldInfo> getReturnFieldInfos() {
+        return returnFieldInfos;
     }
 
     public Element getReturnTypeElement() {

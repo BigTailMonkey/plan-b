@@ -21,7 +21,7 @@ public class JavaWriteProcessor extends AbstractSubProcessor {
                 if (classInfo.hasCompiled()) {
                     continue;
                 }
-                jfo = processContext.getFiler().createSourceFile(classInfo.classFileFullName(), new Element[]{});
+                jfo = this.filer.createSourceFile(classInfo.classFileFullName(), new Element[]{});
                 writer = jfo.openWriter();
                 writer.write(classInfo.toString());
                 writer.flush();

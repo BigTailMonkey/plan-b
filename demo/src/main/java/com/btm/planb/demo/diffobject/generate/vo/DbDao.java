@@ -5,6 +5,7 @@ public class DbDao {
     private String name;
     private Boolean sex;
     private Integer age;
+    private InnerModel innerModel;
 
     public String getName() {
         return name;
@@ -28,5 +29,13 @@ public class DbDao {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public InnerModel getInnerModel() {
+        return innerModel;
+    }
+
+    public void setInnerModel(InnerModel innerModel) {
+        this.innerModel = innerModel;
     }
 }

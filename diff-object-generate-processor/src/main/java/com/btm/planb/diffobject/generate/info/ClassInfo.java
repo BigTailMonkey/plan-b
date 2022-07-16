@@ -62,18 +62,6 @@ public class ClassInfo {
         this.imports.add(imp);
     }
 
-    public void initImport() {
-        initDefaultImport();
-        for (MethodInfo methodInfo : methodInfos) {
-            // 添加方法返回值类型的import信息
-            this.addImport(methodInfo.getReturnTypeElement().toString());
-            // 添加方法参数类型的import信息
-            for (ParameterInfo parameterInfo : methodInfo.getParameterInfos()) {
-                this.addImport(parameterInfo.getClassFullName());
-            }
-        }
-    }
-
     public void addMethods(String method) {
         this.methods.add(method);
     }
@@ -101,9 +89,5 @@ public class ClassInfo {
         builder.append(this.printMethods());
         builder.append("}");
         return builder.toString();
-    }
-
-    private void initDefaultImport() {
-        this.imports.add("java.util.Objects");
     }
 }

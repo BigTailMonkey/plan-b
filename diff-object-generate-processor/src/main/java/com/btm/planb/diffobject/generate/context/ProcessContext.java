@@ -5,6 +5,7 @@ import com.btm.planb.diffobject.generate.info.ClassInfo;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.ArrayList;
@@ -12,12 +13,13 @@ import java.util.List;
 
 public class ProcessContext {
 
-
-    private Messager messager;
-    private Filer filer;
-    private Elements elementUtil;
-    private Types typeUtil;
-    private List<ClassInfo> classInfos = new ArrayList<>();
+    private final Messager messager;
+    private final Filer filer;
+    private final Elements elementUtil;
+    private final Types typeUtil;
+    private final List<ClassInfo> classInfos = new ArrayList<>();
+    // 当前此轮编译的环境
+    private RoundEnvironment roundEnvironment;
 
     public ProcessContext(ProcessingEnvironment processingEnv) {
         messager = processingEnv.getMessager();
@@ -48,5 +50,13 @@ public class ProcessContext {
 
     public List<ClassInfo> getClassInfos() {
         return classInfos;
+    }
+
+    public RoundEnvironment getRoundEnvironment() {
+        return roundEnvironment;
+    }
+
+    public void setRoundEnvironment(RoundEnvironment roundEnvironment) {
+        this.roundEnvironment = roundEnvironment;
     }
 }
