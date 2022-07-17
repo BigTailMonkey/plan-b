@@ -1,5 +1,6 @@
 package com.btm.planb.diffobject.generate.processor.sub;
 
+import com.btm.planb.diffobject.generate.code.CodeTemplate;
 import com.btm.planb.diffobject.generate.context.ProcessContext;
 import com.btm.planb.diffobject.generate.info.*;
 import com.btm.planb.diffobject.generate.processor.AbstractSubProcessor;
@@ -10,7 +11,6 @@ import javax.lang.model.element.ElementKind;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MethodGenerateProcessor extends AbstractSubProcessor {
 
@@ -23,27 +23,9 @@ public class MethodGenerateProcessor extends AbstractSubProcessor {
             }
             List<MethodInfo> methodInfos = classInfo.getMapMethodInfos();
             for (MethodInfo methodInfo : methodInfos) {
-                StringBuilder methodStr = new StringBuilder("public").append(" ");
-                methodStr.append(methodInfo.getReturnTypeElement().getSimpleName()).append(" ")
-                        .append(methodSingle(methodInfo)).append(" {").append("\n")
-                        .append(methodBody(methodInfo))
-                        .append("}").append("\n");
-                classInfo.addMethods(methodStr.toString());
+                classInfo.addMethods(CodeTemplate.printMethod(methodInfo, methodBody(methodInfo)));
             }
         }
-    }
-
-    /**
-     * 组装方法签名
-     * @param methodInfo 方法信息
-     * @return 方法签名
-     */
-    private String methodSingle(MethodInfo methodInfo) {
-        if (Objects.isNull(methodInfo.getParameterInfos()) || methodInfo.getParameterInfos().isEmpty()) {
-            return "";
-        }
-        List<String> parameterStr = methodInfo.getParameterInfos().stream().map(item -> item.getName() + " " + item.getVariableName()).collect(Collectors.toList());
-        return methodInfo.getMethodName() + "(" + String.join(",", parameterStr) + ")";
     }
 
     /**
@@ -58,9 +40,7 @@ public class MethodGenerateProcessor extends AbstractSubProcessor {
         String returnValueName = methodInfo.getReturnValueName();
         StringBuilder body = new StringBuilder();
         // 声明返回值对象
-        body.append(returnTypeElement.getSimpleName()).append(" ")
-                .append(returnValueName).append(" = new ")
-                .append(returnTypeElement.getSimpleName()).append("();\n\n");
+        body.append(CodeTemplate.printReturnObject(returnTypeElement.getSimpleName().toString(), returnValueName));
         for (Element innerElement : innerElements) {
             if (!ElementKind.FIELD.equals(innerElement.getKind())) {
                 continue;
@@ -69,27 +49,18 @@ public class MethodGenerateProcessor extends AbstractSubProcessor {
             String initialUpperFileName = StringUtils.convertInitialUpper(fileName);
             ReturnFieldInfo returnFieldInfo = specifiesInfo.get(fileName);
             if (Objects.nonNull(returnFieldInfo)) {
-                body.append("if (Objects.nonNull(")
-                        .append(returnFieldInfo.getSourceParameterName())
-                        .append(".get").append(StringUtils.convertInitialUpper(returnFieldInfo.getParameterFileName()))
-                        .append("())) {\n");
-                body.append(returnValueName)
-                        .append(".set").append(initialUpperFileName).append("(")
-                        .append(returnFieldInfo.printSourceParameterAndFileGetterMethod()).append(");\n");
-                body.append("} else {\n");
-                body.append(returnValueName)
-                        .append(".set").append(initialUpperFileName).append("(")
-                        .append(methodInfo.getSourceName()).append(".get")
-                        .append(StringUtils.convertInitialUpper(fileName)).append("());\n");
-                body.append("}\n");
+                body.append(CodeTemplate.printIfNullCodeFragment(
+                        methodInfo.getSourceName(),
+                        returnValueName,
+                        StringUtils.convertInitialUpper(fileName),
+                        returnFieldInfo.getSourceParameterName(),
+                        StringUtils.convertInitialUpper(returnFieldInfo.getParameterFileName())));
             } else {
-                body.append(returnValueName)
-                        .append(".set").append(initialUpperFileName).append("(")
-                        .append(methodInfo.getSourceName()).append(".get")
-                        .append(StringUtils.convertInitialUpper(fileName)).append("());\n");
+                body.append(CodeTemplate.printSetterGetter(returnValueName, initialUpperFileName,
+                        methodInfo.getSourceName(), StringUtils.convertInitialUpper(fileName)));
             }
         }
-        body.append("return ").append(returnValueName).append(";\n");
+        body.append(CodeTemplate.printReturn(returnValueName));
         return body.toString();
     }
 
