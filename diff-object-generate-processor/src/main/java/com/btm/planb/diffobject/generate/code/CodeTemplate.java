@@ -2,6 +2,7 @@ package com.btm.planb.diffobject.generate.code;
 
 import com.btm.planb.diffobject.generate.info.ClassInfo;
 import com.btm.planb.diffobject.generate.info.MethodInfo;
+import com.btm.planb.diffobject.generate.util.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -41,12 +42,13 @@ public final class CodeTemplate {
                 "'}' else '{'\n" +
                 printSetterGetter(targetName, targetFileName, templateObject, targetFileName) +
                 "'}'\n";
-        return MessageFormat.format(template, sourceName, sourceFileName);
+        return MessageFormat.format(template, sourceName, StringUtils.convertInitialUpper(sourceFileName));
     }
 
     public static String printSetterGetter(String targetName, String targetFileName, String sourceName, String sourceFileName) {
         String template = "{0}.set{1}({2}.get{3}());\n";
-        return MessageFormat.format(template, targetName, targetFileName, sourceName, sourceFileName);
+        return MessageFormat.format(template, targetName, StringUtils.convertInitialUpper(targetFileName),
+                sourceName, StringUtils.convertInitialUpper(sourceFileName));
     }
 
     public static String printReturnObject(String returnType, String returnObjectName) {

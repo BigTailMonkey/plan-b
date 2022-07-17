@@ -4,7 +4,7 @@ import com.btm.planb.diffobject.generate.code.CodeTemplate;
 import com.btm.planb.diffobject.generate.context.ProcessContext;
 import com.btm.planb.diffobject.generate.info.*;
 import com.btm.planb.diffobject.generate.processor.AbstractSubProcessor;
-import com.btm.planb.diffobject.generate.util.StringUtils;
+import com.btm.planb.diffobject.generate.util.RoundEnvironmentUtil;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -34,33 +34,30 @@ public class MethodGenerateProcessor extends AbstractSubProcessor {
      * @return 方法体
      */
     private String methodBody(MethodInfo methodInfo) {
+        RoundEnvironmentUtil roundEnvironmentUtil = new RoundEnvironmentUtil(this.typeUtil);
         Map<String, ReturnFieldInfo> specifiesInfo = methodInfo.getReturnFieldInfos();
         Element returnTypeElement = methodInfo.getReturnTypeElement();
-        List<? extends Element> innerElements = returnTypeElement.getEnclosedElements();
-        String returnValueName = methodInfo.getReturnValueName();
+        String returnObjectName = methodInfo.getReturnValueName();
+        List<? extends Element> filedElements = roundEnvironmentUtil.findElementByKind(returnTypeElement.getEnclosedElements(), ElementKind.FIELD);
         StringBuilder body = new StringBuilder();
         // 声明返回值对象
-        body.append(CodeTemplate.printReturnObject(returnTypeElement.getSimpleName().toString(), returnValueName));
-        for (Element innerElement : innerElements) {
-            if (!ElementKind.FIELD.equals(innerElement.getKind())) {
-                continue;
-            }
+        body.append(CodeTemplate.printReturnObject(returnTypeElement.getSimpleName().toString(), returnObjectName));
+        for (Element innerElement : filedElements) {
             String fileName = innerElement.getSimpleName().toString();
-            String initialUpperFileName = StringUtils.convertInitialUpper(fileName);
             ReturnFieldInfo returnFieldInfo = specifiesInfo.get(fileName);
             if (Objects.nonNull(returnFieldInfo)) {
                 body.append(CodeTemplate.printIfNullCodeFragment(
                         methodInfo.getSourceName(),
-                        returnValueName,
-                        StringUtils.convertInitialUpper(fileName),
+                        returnObjectName,
+                        fileName,
                         returnFieldInfo.getSourceParameterName(),
-                        StringUtils.convertInitialUpper(returnFieldInfo.getParameterFileName())));
+                        returnFieldInfo.getParameterFileName()));
             } else {
-                body.append(CodeTemplate.printSetterGetter(returnValueName, initialUpperFileName,
-                        methodInfo.getSourceName(), StringUtils.convertInitialUpper(fileName)));
+                body.append(CodeTemplate.printSetterGetter(returnObjectName, fileName,
+                        methodInfo.getSourceName(), fileName));
             }
         }
-        body.append(CodeTemplate.printReturn(returnValueName));
+        body.append(CodeTemplate.printReturn(returnObjectName));
         return body.toString();
     }
 
