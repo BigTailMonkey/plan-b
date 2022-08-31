@@ -5,6 +5,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 线程组管理器，
+ */
 public class TaskGroupManager {
 
     private static final List<Class<AbstractTaskThread>> ALL_TASK_THREAD = Collections.synchronizedList(new ArrayList<>());
@@ -37,6 +40,14 @@ public class TaskGroupManager {
         }
     }
 
+    /**
+     * 使用指定的一组任务线程组，对传入的执行参数进行并发处理。
+     * @param taskGroupName 任务线程组
+     * @param parameter 执行参数
+     * @param result 执行结果
+     * @param <V> 执行结果的类型
+     * @return
+     */
     public <V> Carrier execute(String taskGroupName, Parameter parameter, V result) {
         if (!taskGroups.containsKey(taskGroupName)) {
             throw new RuntimeException("未找到任务组：" + taskGroupName);

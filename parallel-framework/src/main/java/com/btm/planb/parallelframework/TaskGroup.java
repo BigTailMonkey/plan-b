@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * 任务组
+ * 任务组，持有一个执行器，并维护相同名称的任务线程。<br/>
+ * 持有的执行器是整个并行框架公用的
  */
 public class TaskGroup {
 

@@ -54,7 +54,5 @@ public abstract class AbstractTaskThread implements Runnable {
         }
     }
 
-    public void doRun(Parameter parameter) {
-
-    }
+    public abstract void doRun(Parameter parameter);
 }
