@@ -1,17 +1,14 @@
 package com.btm.planb.db.data.refresh;
 
 import com.btm.planb.db.data.refresh.model.BatchDataInfo;
-import com.btm.planb.db.data.refresh.model.SourceDataDefinition;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class RefreshFunction<S, K extends SourceDataDefinition, R> {
+public class RefreshFunction<S, K, Z, R> {
 
 
     /**
@@ -28,12 +25,12 @@ public class RefreshFunction<S, K extends SourceDataDefinition, R> {
     /**
      * 待处理源数据分组方法
      */
-    private Function<List<K>, List<List<K>>> group;
+    private Function<List<K>, List<Z>> group;
 
     /**
      * 数据处理方法
      */
-    private Function<List<K>, List<R>> dataProcess;
+    private Function<Z, R> dataProcess;
 
     protected RefreshFunction() {}
 
@@ -55,19 +52,19 @@ public class RefreshFunction<S, K extends SourceDataDefinition, R> {
         this.enableContinue = enableContinue;
     }
 
-    public List<List<K>> group(List<K> list) {
-        return Objects.isNull(this.group) ? list.parallelStream().map(Collections::singletonList).collect(Collectors.toList()) : group.apply(list);
+    public List<Z> group(List<K> list) {
+        return group.apply(list);
     }
 
-    public void setGroup(Function<List<K>, List<List<K>>> group) {
+    public void setGroup(Function<List<K>, List<Z>> group) {
         this.group = group;
     }
 
-    public  List<R> dataProcess(List<K> list) {
+    public  R dataProcess(Z list) {
         return dataProcess.apply(list);
     }
 
-    public void setDataProcess(Function<List<K>, List<R>> dataProcess) {
+    public void setDataProcess(Function<Z, R> dataProcess) {
         this.dataProcess = dataProcess;
     }
 }

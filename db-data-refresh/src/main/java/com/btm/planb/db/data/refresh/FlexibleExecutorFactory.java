@@ -14,14 +14,14 @@ import java.util.function.Function;
  * @param <K> 数据源方法的返回值类型
  * @param <R> 数据刷新处理完毕后的返回值类型
  */
-public class FlexibleExecutorFactory<S, K extends SourceDataDefinition, R> extends ExecutorFactory<S, K, R> {
+public class FlexibleExecutorFactory<S, K extends SourceDataDefinition, R> extends AbstractExecutorFactory {
 
     /**
      * 任务全部提交完毕之后，最长等待时间(单位：秒)，超过此时间，线程池强制关闭
      */
     private int waitTime = 0;
 
-    protected final RefreshFunction<S, K, R> refreshFunction = new RefreshFunction<>();
+    protected final RefreshFunction<S, K, List<K>, R> refreshFunction = new RefreshFunction<>();
 
     @Override
     public FlexibleExecutorFactory<S, K, R> name(String name) {
@@ -61,12 +61,12 @@ public class FlexibleExecutorFactory<S, K extends SourceDataDefinition, R> exten
         return this;
     }
 
-    public FlexibleExecutorFactory<S, K, R> dataProcess(Function<List<K>, List<R>> dataProcess) {
+    public FlexibleExecutorFactory<S, K, R> dataProcess(Function<List<K>, R> dataProcess) {
         refreshFunction.setDataProcess(dataProcess);
         return this;
     }
 
-    public TimeLimitExecutor<S, K, R> build() {
+    public TimeLimitExecutor<S, K, List<K>, R> build() {
         return new TimeLimitExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
     }
     

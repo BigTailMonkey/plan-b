@@ -1,18 +1,11 @@
 package com.btm.planb.db.data.refresh;
 
-import com.btm.planb.db.data.refresh.model.BatchDataInfo;
-import com.btm.planb.db.data.refresh.model.SourceDataDefinition;
-
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
 
-public abstract class ExecutorFactory<S, K extends SourceDataDefinition, R> {
+public abstract class AbstractExecutorFactory {
 
     /**
      * 日志关键词，推荐使用场景名称
@@ -20,26 +13,26 @@ public abstract class ExecutorFactory<S, K extends SourceDataDefinition, R> {
     protected String name = "data refresh executor";
 
     /**
-     * 并发数量
+     * 并发数量，默认为2
      */
     private int parallelNumber = 2;
 
     /**
-     * 等待队列容量
+     * 等待队列容量，默认2000
      */
     private int queueSize = 2000;
 
-    protected ExecutorFactory name(String name) {
+    protected AbstractExecutorFactory name(String name) {
         this.name = name;
         return this;
     }
 
-    protected ExecutorFactory<S, K, R> parallelNumber(int number) {
+    protected AbstractExecutorFactory parallelNumber(int number) {
         this.parallelNumber = number;
         return this;
     }
 
-    protected ExecutorFactory<S, K, R> queueSize(int size) {
+    protected AbstractExecutorFactory queueSize(int size) {
         this.queueSize = size;
         return this;
     }
