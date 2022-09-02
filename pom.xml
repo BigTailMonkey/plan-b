@@ -20,6 +20,7 @@
         <module>diff-object-generate</module>
         <module>diff-object-generate-processor</module>
         <module>spring-test-accelerator</module>
+        <module>db-data-refresh</module>
     </modules>
 
     <properties>
