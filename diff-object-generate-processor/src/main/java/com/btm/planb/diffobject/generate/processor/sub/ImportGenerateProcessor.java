@@ -6,6 +6,9 @@ import com.btm.planb.diffobject.generate.info.MethodInfo;
 import com.btm.planb.diffobject.generate.info.ParameterInfo;
 import com.btm.planb.diffobject.generate.processor.AbstractSubProcessor;
 
+/**
+ * import信息生成子处理器
+ */
 public class ImportGenerateProcessor extends AbstractSubProcessor {
 
     @Override

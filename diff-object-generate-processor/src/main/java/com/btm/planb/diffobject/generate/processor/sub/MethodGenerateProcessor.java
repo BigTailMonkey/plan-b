@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * java类方法生成子处理器
+ */
 public class MethodGenerateProcessor extends AbstractSubProcessor {
 
     @Override
@@ -41,7 +44,7 @@ public class MethodGenerateProcessor extends AbstractSubProcessor {
         List<? extends Element> filedElements = roundEnvironmentUtil.findElementByKind(returnTypeElement.getEnclosedElements(), ElementKind.FIELD);
         StringBuilder body = new StringBuilder();
         // 声明返回值对象
-        body.append(CodeTemplate.printReturnObject(returnTypeElement.getSimpleName().toString(), returnObjectName));
+        body.append(CodeTemplate.printNewObject(returnTypeElement.getSimpleName().toString(), returnObjectName));
         for (Element innerElement : filedElements) {
             String fileName = innerElement.getSimpleName().toString();
             ReturnFieldInfo returnFieldInfo = specifiesInfo.get(fileName);

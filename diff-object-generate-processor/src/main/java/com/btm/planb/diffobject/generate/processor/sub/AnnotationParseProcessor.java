@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 注解解析
+ * 注解解析子处理器
  */
 public class AnnotationParseProcessor extends AbstractSubProcessor {
 

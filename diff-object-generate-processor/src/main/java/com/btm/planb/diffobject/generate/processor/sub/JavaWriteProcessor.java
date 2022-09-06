@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Objects;
 
+/**
+ * java类对象持久化子处理器
+ */
 public class JavaWriteProcessor extends AbstractSubProcessor {
 
     @Override

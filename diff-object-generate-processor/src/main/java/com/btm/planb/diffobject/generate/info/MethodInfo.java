@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 构建Java源码文件的关键信息，方法定义信息
+ */
 public class MethodInfo {
 
     // 方法的返回值对象的字段信息
