@@ -46,7 +46,7 @@ public class FlexibleExecutorFactory<S, K extends SourceDataDefinition> extends 
     }
 
     @Override
-    protected FlexibleExecutorFactory<S, K> executor(ExecutorService executorService) {
+    public FlexibleExecutorFactory<S, K> executor(ExecutorService executorService) {
         super.executorService = executorService;
         return this;
     }

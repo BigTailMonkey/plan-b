@@ -46,7 +46,7 @@ public class BreakUpUncertainExecutorFactory<S, K extends SourceDataDefinition, 
     }
 
     @Override
-    protected BreakUpUncertainExecutorFactory<S, K, R> executor(ExecutorService executorService) {
+    public BreakUpUncertainExecutorFactory<S, K, R> executor(ExecutorService executorService) {
         super.executorService = executorService;
         return this;
     }

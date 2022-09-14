@@ -42,7 +42,7 @@ public class BreakUpCertainExecutorFactory<K, R> extends AbstractExecutorFactory
     }
 
     @Override
-    protected BreakUpCertainExecutorFactory<K, R> executor(ExecutorService executorService) {
+    public BreakUpCertainExecutorFactory<K, R> executor(ExecutorService executorService) {
         super.executorService = executorService;
         return this;
     }
