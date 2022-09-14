@@ -9,10 +9,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * code模板
+ */
 public final class CodeTemplate {
 
     private CodeTemplate() {}
 
+    /**
+     * java class类框架主体，<br/>
+     * 主要为package、import、class name以及备注信息
+     * @param classInfo class类主体信息
+     * @return
+     */
     public static String printClass(ClassInfo classInfo) {
         String template = "package {0};\n\n" +
                 "{1}\n" +
@@ -21,6 +30,12 @@ public final class CodeTemplate {
         return MessageFormat.format(template, classInfo.getPackageName(), classInfo.printImport(), printClassDeclare(classInfo));
     }
 
+    /**
+     * java class文件主体定义,<br/>
+     * 主要为类名称及实现的接口名称
+     * @param classInfo  class类主体信息
+     * @return
+     */
     public static String printClassDeclare(ClassInfo classInfo) {
         String template = "public class {0} implements {1} '{'\n" +
                 "{2}\n" +
@@ -28,6 +43,13 @@ public final class CodeTemplate {
         return MessageFormat.format(template, classInfo.className(), classInfo.getInterfaceName(), classInfo.printMethods());
     }
 
+    /**
+     * java 方法主体定义，<br/>
+     * 主要为方法返回值类型、方法名称、方法参数列表以及方法体
+     * @param methodInfo 方法信息
+     * @param body 方法体
+     * @return
+     */
     public static String printMethod(MethodInfo methodInfo, String body) {
         String template = "public {0} {1} ({2}) '{'\n" +
                 "{3}" +
@@ -36,6 +58,15 @@ public final class CodeTemplate {
                 methodInfo.getMethodName(), methodParameters(methodInfo), body);
     }
 
+    /**
+     * 判空逻辑
+     * @param templateObject 模版对象
+     * @param targetName 目标对象名称
+     * @param targetFileName 目标字段名称
+     * @param sourceName 数据来源对象名称
+     * @param sourceFileName 数据来源字段名称
+     * @return
+     */
     public static String printIfNullCodeFragment(String templateObject, String targetName, String targetFileName, String sourceName, String sourceFileName) {
         String template = "if(Objects.nonNull({0}.get{1}())) '{'\n" +
                 printSetterGetter(targetName, targetFileName, sourceName, sourceFileName) +
@@ -45,17 +76,36 @@ public final class CodeTemplate {
         return MessageFormat.format(template, sourceName, StringUtils.convertInitialUpper(sourceFileName));
     }
 
+    /**
+     * 从数据源对象的getter方法取值并传入目标对象的setter方法
+     * @param targetName 目标对象名称
+     * @param targetFileName 目标字段名称
+     * @param sourceName 数据源对象名称
+     * @param sourceFileName 数据源字段名称
+     * @return
+     */
     public static String printSetterGetter(String targetName, String targetFileName, String sourceName, String sourceFileName) {
         String template = "{0}.set{1}({2}.get{3}());\n";
         return MessageFormat.format(template, targetName, StringUtils.convertInitialUpper(targetFileName),
                 sourceName, StringUtils.convertInitialUpper(sourceFileName));
     }
 
-    public static String printReturnObject(String returnType, String returnObjectName) {
+    /**
+     * new对象
+     * @param returnType 返回值的类型
+     * @param returnObjectName 返回值对象的名称
+     * @return
+     */
+    public static String printNewObject(String returnType, String returnObjectName) {
         String template = "{0} {1} = new {0}();\n";
         return MessageFormat.format(template, returnType, returnObjectName);
     }
 
+    /**
+     * 方法返回语句
+     * @param returnObjectName 返回值对象的名称
+     * @return
+     */
     public static String printReturn(String returnObjectName) {
         String template = "return {0};\n";
         return MessageFormat.format(template, returnObjectName);

@@ -11,6 +11,10 @@ import javax.lang.model.util.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 处理流程上下文，
+ * 用于在各个处理器、子处理器之间传递数据
+ */
 public class ProcessContext {
 
     private final Messager messager;

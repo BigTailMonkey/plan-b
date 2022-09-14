@@ -9,6 +9,9 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
+/**
+ * 差异对象构建子处理器的抽象
+ */
 public abstract class AbstractSubProcessor {
 
     protected RoundEnvironment roundEnv;

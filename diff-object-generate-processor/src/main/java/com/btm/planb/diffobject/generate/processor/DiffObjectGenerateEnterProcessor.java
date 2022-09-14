@@ -8,6 +8,9 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import java.util.*;
 
+/**
+ * 差异对象生成入口处理器
+ */
 public class DiffObjectGenerateEnterProcessor extends AbstractProcessor {
 
     private ProcessContext processContext;

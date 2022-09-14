@@ -3,7 +3,7 @@ package com.btm.planb.diffobject.generate.info;
 import javax.lang.model.element.Element;
 
 /**
- * 参数信息
+ * 构建Java源码文件的关键信息，参数信息
  */
 public class ParameterInfo {
 

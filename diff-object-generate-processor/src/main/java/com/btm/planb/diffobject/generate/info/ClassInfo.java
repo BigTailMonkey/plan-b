@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 构建Java源码文件的关键信息
+ * 构建Java源码文件的关键信息，类主体信息
  */
 public class ClassInfo {
 

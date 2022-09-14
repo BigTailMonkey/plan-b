@@ -7,7 +7,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 
 /**
- * 方法的返回值对象字段信息
+ * 构建Java源码文件的关键信息，方法的返回值对象字段信息
  */
 public class ReturnFieldInfo {
 
