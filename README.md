@@ -14,7 +14,7 @@
 ##### export-pdf
 导出pdf
 
-##### parallel-framework
+##### parallel-task-framework
 并行任务执行框架  
 通过实现AbstractTaskThread抽象类，生命具体的处理流程  
 通过TaskGroupManager管理全部的任务线程实现，管理器会自动根据TaskThread命名进行分组，并可以指定使用线程组使用传入的参数进行处理

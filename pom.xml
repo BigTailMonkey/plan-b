@@ -15,12 +15,13 @@
         <module>time-util</module>
         <module>demo</module>
         <module>xxljob-enhance</module>
+        <module>parallel-task-framework</module>
         <module>parallel-framework</module>
         <module>stream-condition</module>
         <module>diff-object-generate</module>
         <module>diff-object-generate-processor</module>
         <module>spring-test-accelerator</module>
-        <module>db-data-refresh</module>
+        <module>parallel-thread-transaction</module>
     </modules>
 
     <properties>
@@ -80,6 +81,16 @@
             <dependency>
                 <groupId>com.btm.planb</groupId>
                 <artifactId>spring-test-accelerator</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>parallel-framework</artifactId>
+                <version>${plan-b.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.btm.planb</groupId>
+                <artifactId>parallel-thread-transaction</artifactId>
                 <version>${plan-b.version}</version>
             </dependency>
 
@@ -148,6 +159,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
                 <version>2.5.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>5.2.8.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
