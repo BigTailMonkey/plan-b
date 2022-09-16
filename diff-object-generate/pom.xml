@@ -27,26 +27,6 @@
             <artifactId>javassist</artifactId>
             <version>3.21.0-GA</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.google.auto.service</groupId>-->
-<!--            <artifactId>auto-service</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.google.auto.service</groupId>-->
-<!--            <artifactId>auto-service-annotations</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.mapstruct</groupId>-->
-<!--            <artifactId>mapstruct-processor</artifactId>-->
-<!--        </dependency>-->
     </dependencies>
 
 </project>
