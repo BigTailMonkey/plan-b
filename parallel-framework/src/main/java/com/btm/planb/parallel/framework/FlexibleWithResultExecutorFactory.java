@@ -78,7 +78,7 @@ public class FlexibleWithResultExecutorFactory<S, K extends SourceDataDefinition
     }
 
     public TimeLimitWithResultExecutor<S, K, List<K>, R> build() {
-        return new TimeLimitWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
+        return new TimeLimitWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction, isNeedCloseExecutor());
     }
     
 }

@@ -25,6 +25,8 @@ public abstract class AbstractExecutorFactory {
 
     protected ExecutorService executorService;
 
+    private boolean needCloseExecutor = false;
+
     protected abstract AbstractExecutorFactory name(String name);
 
     protected abstract AbstractExecutorFactory parallelNumber(int number);
@@ -33,17 +35,25 @@ public abstract class AbstractExecutorFactory {
 
     protected abstract AbstractExecutorFactory executor(ExecutorService executorService);
 
-    protected ExecutorService buildOneExecutor() {
+    protected boolean isNeedCloseExecutor() {
+        return needCloseExecutor;
+    }
 
-        return Objects.nonNull(executorService) ? executorService : new ThreadPoolExecutor(
-                this.parallelNumber, this.parallelNumber,
-                0, TimeUnit.MILLISECONDS
-                , new LinkedBlockingQueue<>(this.queueSize),
-                r -> {
-                    Thread thread = new Thread(r, name);
-                    thread.setDaemon(true);
-                    return thread;
-                },
-                new ThreadPoolExecutor.CallerRunsPolicy());
+    protected ExecutorService buildOneExecutor() {
+        if (Objects.nonNull(executorService)) {
+            return executorService;
+        } else {
+            needCloseExecutor = true;
+            return new ThreadPoolExecutor(
+                    this.parallelNumber, this.parallelNumber,
+                    0, TimeUnit.MILLISECONDS
+                    , new LinkedBlockingQueue<>(this.queueSize),
+                    r -> {
+                        Thread thread = new Thread(r, name);
+                        thread.setDaemon(true);
+                        return thread;
+                    },
+                    new ThreadPoolExecutor.CallerRunsPolicy());
+        }
     }
 }

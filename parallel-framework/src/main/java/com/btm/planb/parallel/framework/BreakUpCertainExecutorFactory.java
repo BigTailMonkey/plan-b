@@ -64,7 +64,7 @@ public class BreakUpCertainExecutorFactory<K, R> extends AbstractExecutorFactory
 
     public CountNumberExecutor<K, K, R> build() {
         refreshFunction.setGroup(list -> list);
-        return new CountNumberExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
+        return new CountNumberExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction, isNeedCloseExecutor());
     }
 
     public WithResult withResult()  {
@@ -81,7 +81,7 @@ public class BreakUpCertainExecutorFactory<K, R> extends AbstractExecutorFactory
 
         public CountNumberWithResultExecutor<K, K, R> build() {
             refreshFunction.setGroup(list -> list);
-            return new CountNumberWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
+            return new CountNumberWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction, isNeedCloseExecutor());
         }
 
     }

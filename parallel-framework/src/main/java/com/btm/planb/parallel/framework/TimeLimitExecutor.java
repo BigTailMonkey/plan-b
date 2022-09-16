@@ -26,13 +26,17 @@ public class TimeLimitExecutor<S, K extends SourceDataDefinition, Z, R> extends 
 
     private final ExecutorService executorService;
 
+    private final boolean needCloseExecutor;
+
     private final RefreshFunction<S, K, Z, R> refreshFunction;
 
-    protected TimeLimitExecutor(String name, int waitTime, ExecutorService executorService, RefreshFunction<S, K, Z, R> refreshFunction) {
+    protected TimeLimitExecutor(String name, int waitTime, ExecutorService executorService,
+                                RefreshFunction<S, K, Z, R> refreshFunction, boolean needCloseExecutor) {
         this.name = name;
         this.waitTime = waitTime;
         this.executorService = executorService;
         this.refreshFunction = refreshFunction;
+        this.needCloseExecutor = needCloseExecutor;
     }
 
     public void active(S s) {
@@ -62,7 +66,9 @@ public class TimeLimitExecutor<S, K extends SourceDataDefinition, Z, R> extends 
             log.error("time-limit executor error.", e);
             throw e;
         } finally {
-            safeForceShutDown(this.executorService, this.waitTime);
+            if (needCloseExecutor) {
+                safeForceShutDown(this.executorService, this.waitTime);
+            }
         }
     }
 

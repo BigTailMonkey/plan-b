@@ -27,23 +27,28 @@ public class CountNumberWithResultExecutor<K, Z, R> extends AbstractExecutor {
 
     private final ExecutorService executorService;
 
+    private final boolean needCloseExecutor;
+
     private final RefreshFunction<Void, K, Z, R> refreshFunction;
 
-    protected CountNumberWithResultExecutor(String name, int waitTime, ExecutorService executorService, RefreshFunction<Void, K, Z, R> refreshFunction) {
+    protected CountNumberWithResultExecutor(String name, int waitTime, ExecutorService executorService,
+                                            RefreshFunction<Void, K, Z, R> refreshFunction, boolean needCloseExecutor) {
         this.name = name;
         this.waitTime = waitTime;
         this.executorService = executorService;
         this.refreshFunction = refreshFunction;
+        this.needCloseExecutor = needCloseExecutor;
     }
 
     public List<R> active() throws ExecutionException {
-        log.info("db data refresh start, {}", this.name);
+        log.debug("parallel thread framework used, {}", this.name);
         TimeLimitFutureContainer<R> container = new TimeLimitFutureContainer<>(TimeLimitFutureContainer.FutureOutTimeStrategy.DISCARDED);
         List<R> resultList;
         try {
             List<K> sourceData = refreshFunction.dataSourceFunction(null, null);
             if (Objects.nonNull(sourceData) && !sourceData.isEmpty()) {
                 CountDownLatch latch = new CountDownLatch(sourceData.size());
+                log.debug("task total number: {}", sourceData.size());
                 List<Z> group = refreshFunction.group(sourceData);
                 for (Z ks : group) {
                     container.add(executorService.submit(() -> {
@@ -71,7 +76,9 @@ public class CountNumberWithResultExecutor<K, Z, R> extends AbstractExecutor {
             log.error("[{}]count-number executor error.", this.name, e);
             throw e;
         } finally {
-            safeForceShutDown(this.executorService, 0);
+            if (needCloseExecutor) {
+                safeForceShutDown(this.executorService, 0);
+            }
             resultList = container.extract(5, TimeUnit.MINUTES);
         }
         return resultList;

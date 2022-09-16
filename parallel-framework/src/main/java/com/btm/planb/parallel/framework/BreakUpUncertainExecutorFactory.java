@@ -73,7 +73,7 @@ public class BreakUpUncertainExecutorFactory<S, K extends SourceDataDefinition, 
 
     public TimeLimitExecutor<S, K, K, R> build() {
         refreshFunction.setGroup(list -> list);
-        return new TimeLimitExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
+        return new TimeLimitExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction, isNeedCloseExecutor());
     }
 
     public WithResult withResult()  {
@@ -90,7 +90,7 @@ public class BreakUpUncertainExecutorFactory<S, K extends SourceDataDefinition, 
 
         public TimeLimitWithResultExecutor<S, K, K, R> build() {
             refreshFunction.setGroup(list -> list);
-            return new TimeLimitWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction);
+            return new TimeLimitWithResultExecutor<>(name, this.waitTime, buildOneExecutor(), refreshFunction, isNeedCloseExecutor());
         }
 
     }

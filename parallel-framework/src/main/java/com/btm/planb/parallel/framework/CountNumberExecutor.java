@@ -27,11 +27,15 @@ public class CountNumberExecutor<K, Z, R> extends AbstractExecutor {
 
     private final RefreshFunction<Void, K, Z, R> refreshFunction;
 
-    protected CountNumberExecutor(String name, int waitTime, ExecutorService executorService, RefreshFunction<Void, K, Z, R> refreshFunction) {
+    private final boolean needCloseExecutor;
+
+    protected CountNumberExecutor(String name, int waitTime, ExecutorService executorService,
+                                  RefreshFunction<Void, K, Z, R> refreshFunction, boolean needCloseExecutor) {
         this.name = name;
         this.waitTime = waitTime;
         this.executorService = executorService;
         this.refreshFunction = refreshFunction;
+        this.needCloseExecutor = needCloseExecutor;
     }
 
     public void active() {
@@ -65,7 +69,9 @@ public class CountNumberExecutor<K, Z, R> extends AbstractExecutor {
             log.error("[{}]count-number executor error.", this.name, e);
             throw e;
         } finally {
-            safeForceShutDown(this.executorService, 0);
+            if (needCloseExecutor) {
+                safeForceShutDown(this.executorService, 0);
+            }
         }
     }
 
