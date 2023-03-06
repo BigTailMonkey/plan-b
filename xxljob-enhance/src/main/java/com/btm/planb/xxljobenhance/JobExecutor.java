@@ -112,6 +112,7 @@ public class JobExecutor {
     private boolean doExecuteWithPost(Connection connection) throws IOException {
         Document post = connection.post();
         String result = post.getElementsByTag("body").text();
+        System.out.println(result);
         if (result.contains("\"code\":200,")) {
             return true;
         } else {

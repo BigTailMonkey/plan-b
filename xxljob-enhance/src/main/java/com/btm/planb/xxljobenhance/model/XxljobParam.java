@@ -234,10 +234,8 @@ public class XxljobParam {
     }
 
     public Map<String, String> updateExecutorParam(String executorParam) {
-        if (Objects.isNull(this.paramMap)) {
-            initDataMap();
-        }
-        this.paramMap.put("executorParam", executorParam);
-        return this.paramMap;
+        Map<String, String> allParam = getAllParam();
+        allParam.put("executorParam", executorParam);
+        return allParam;
     }
 }
