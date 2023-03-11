@@ -11,7 +11,7 @@ public class SimpleStart {
         ParamParser paramParser = new ParamParser(paramFilePath);
         XxljobParam param = paramParser.getXxljobParam();
         String host = param.getHost();
-        System.out.println("参数解析完成，定时任务执行器地址:["+host+"]，执行登陆操作…………");
+        System.out.println("参数解析完成，定时任务执行器地址:[" + host + "]，执行登陆操作…………");
         if (param.isNeedTicket()) {
             // 执行登陆动作，拿到登陆信息
             LoginProxy<String> loginProxy = new LoginProxy<String>() {
@@ -34,9 +34,9 @@ public class SimpleStart {
         JobListReader jobListReader = new JobListReader(ticket);
         if (jobListReader.checkJobInfo(host, param)) {
             System.out.println("["+param.getJobDesc()+"]信息检查通过，开始执行批量调用");
-            JobExecutor jobExecutor = new JobExecutor(ticket);
+            JobExecutor jobExecutor = new JobExecutor(ticket, host);
             // 使用参数执行调用
-            jobExecutor.executePostRequestAll(host, paramParser.getXxljobParam(), paramParser.getExecuteParam(), true, true);
+            jobExecutor.executePostRequestAll(paramParser.getXxljobParam(), paramParser.getExecuteParam(), true, true);
         } else {
             System.out.println("未查询到对应的定时任务job对象，请核对信息后重试");
         }
