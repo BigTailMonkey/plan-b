@@ -8,6 +8,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Exporter {
+
+    /**
+     * 生成文档并报错
+     * @param file 生成文件的保存未知
+     * @throws DocumentException
+     * @throws IOException
+     */
     public void createDocContext(String file) throws DocumentException, IOException {
         // 设置纸张大小
         Document document = new Document(PageSize.A4);
